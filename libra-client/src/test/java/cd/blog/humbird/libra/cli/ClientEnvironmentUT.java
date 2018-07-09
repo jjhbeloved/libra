@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.cli;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.util.Properties;
 
