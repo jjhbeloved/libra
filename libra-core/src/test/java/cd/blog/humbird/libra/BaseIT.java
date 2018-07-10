@@ -1,6 +1,7 @@
 package cd.blog.humbird.libra;
 
 
+import cd.blog.humbird.libra.spring.LibraPlaceholderConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -17,8 +18,8 @@ public class BaseIT extends AbstractTestNGSpringContextTests {
     private X x;
 
     public void go() {
-        X c = x.getBean("x_warm", X.class);
-        c.x();
+        System.out.println(x.getName());
+        System.out.println(x.getXx());
     }
 
     @Test

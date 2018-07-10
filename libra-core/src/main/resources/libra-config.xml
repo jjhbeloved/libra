@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:libra="http://humbird.blog.cd/schema/libra"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://humbird.blog.cd/schema/libra http://humbird.blog.cd/schema/libra/libra-1.0.0.xsd">
+
+    <libra:config includeLocalProps="false"/>
+</beans>

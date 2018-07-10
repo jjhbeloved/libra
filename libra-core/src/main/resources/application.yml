@@ -1,6 +1,3 @@
-info:
-  address: USA
-
 logger:
    dir: /install_apps/intelliJ_bak/os/libra
    level: INFO

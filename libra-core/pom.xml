@@ -10,36 +10,30 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>cd.blog.humbird</groupId>
     <artifactId>libra-core</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <dependencies>
+
+        <dependency>
+            <groupId>cd.blog.humbird</groupId>
+            <artifactId>libra-client</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring-boot.version}</version>
+            <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <!--<plugin>-->
-                <!--<groupId>org.springframework.boot</groupId>-->
-                <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-            <!--</plugin>-->
-        </plugins>
-    </build>
 
 </project>
