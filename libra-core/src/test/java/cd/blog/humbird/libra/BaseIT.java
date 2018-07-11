@@ -1,16 +1,8 @@
 package cd.blog.humbird.libra;
 
 
-import cd.blog.humbird.libra.entity.Environment;
-import cd.blog.humbird.libra.repository.mapper.EnviornmentMapper;
-import cd.blog.humbird.libra.spring.LibraPlaceholderConfigurer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author david

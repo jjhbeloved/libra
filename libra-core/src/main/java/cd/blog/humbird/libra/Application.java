@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ImportResource;
  * @author david
  * @since created by on 18/7/5 00:13
  */
-
 @SpringBootApplication(scanBasePackages = "cd.blog.humbird.libra")
 @ImportResource("classpath*:libra-config.xml")
 public class Application {

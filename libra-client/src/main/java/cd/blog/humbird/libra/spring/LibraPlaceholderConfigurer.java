@@ -1,13 +1,15 @@
 package cd.blog.humbird.libra.spring;
 
 import cd.blog.humbird.libra.cli.config.ConfigLoader;
+import cd.blog.humbird.libra.cli.model.BeanData;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -18,14 +20,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -44,6 +42,8 @@ public class LibraPlaceholderConfigurer extends PropertyPlaceholderConfigurer im
     private ApplicationContext applicationContext;
 
     private Binder localProperties;
+
+    private Map<String, List<BeanData>> properties = Maps.newLinkedHashMap();
 
     public void setPropertiesPath(String propertiesPath) {
         this.propertiesPath = propertiesPath;
@@ -85,7 +85,7 @@ public class LibraPlaceholderConfigurer extends PropertyPlaceholderConfigurer im
         for (String beanName : beanNames) {
             // Check that we're not parsing our own bean definition,
             // to avoid failing on unresolvable placeholders in properties file locations.
-            if (!(beanName.equals(this.beanName) && beanFactoryToProcess.equals(this.beanFactory))) {
+            if ((beanName.equals(this.beanName) && beanFactoryToProcess.equals(this.beanFactory))) {
                 BeanDefinition beanDefinition = beanFactoryToProcess.getBeanDefinition(beanName);
                 processPlaceholderProperties(beanDefinition);
 //                processAnnotatedProperties(beanFactoryToProcess, beanNames[i]);
@@ -94,17 +94,31 @@ public class LibraPlaceholderConfigurer extends PropertyPlaceholderConfigurer im
         super.processProperties(beanFactoryToProcess, properties);
     }
 
+    /**
+     * 解析 bean 文件中 <properties name="xxx" value="${xxx}"/> 的value 的值
+     * value 会被解析成 TypedStringValue 类型
+     * 将解析出来的值保存起来, 一个值 可以对应多个 bean 对象使用
+     * e.g.:
+     * <bean name="aBean"><properties name="url" value="${url}"/></bean>
+     * <bean name="bBean"><properties name="url" value="${url}"/></bean>
+     * key->url, value->[aBean,bBean]
+     *
+     * @param beanDefinition
+     */
     private void processPlaceholderProperties(BeanDefinition beanDefinition) {
         if (beanDefinition.hasPropertyValues()) {
             MutablePropertyValues pvs = beanDefinition.getPropertyValues();
             PropertyValue[] pvArray = pvs.getPropertyValues();
             for (PropertyValue pv : pvArray) {
                 Object v = pv.getValue();
-                System.out.print(v + " ------- ");
                 if (v instanceof TypedStringValue) {
                     String value = ((TypedStringValue) v).getValue();
-                    System.out.println(value);
-
+                    if (StringUtils.startsWithIgnoreCase(DEFAULT_PLACEHOLDER_PREFIX, value)
+                            && StringUtils.endsWithIgnoreCase(DEFAULT_PLACEHOLDER_SUFFIX, value)) {
+                        String key = value.substring(2, value.length() - 1);
+                        List<BeanData> beanDatas = properties.computeIfAbsent(key, k -> Lists.newLinkedList());
+                        beanDatas.add(new BeanData(beanName, pv.getName()));
+                    }
                 }
             }
         }
