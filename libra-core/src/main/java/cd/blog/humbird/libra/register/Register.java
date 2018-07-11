@@ -7,6 +7,8 @@ import java.util.List;
  */
 public interface Register {
 
+    void init() throws Exception;
+
     void registerContextValue(String key, String value);
 
     void registerAndPushContextValue(String key, String value);

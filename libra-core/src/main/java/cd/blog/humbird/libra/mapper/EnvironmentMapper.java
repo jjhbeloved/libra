@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.repository.mapper;
+package cd.blog.humbird.libra.mapper;
 
 import cd.blog.humbird.libra.entity.Environment;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by david on 2018/7/11.
  */
-public interface EnviornmentMapper {
+public interface EnvironmentMapper {
 
     List<Environment> findAll();
 

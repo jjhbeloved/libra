@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cd.blog.humbird.libra.repository.mapper.EnviornmentMapper">
+<mapper namespace="cd.blog.humbird.libra.mapper.EnvironmentMapper">
 
     <resultMap id="BaseResult" type="cd.blog.humbird.libra.entity.Environment">
         <id column="id" property="id"/>

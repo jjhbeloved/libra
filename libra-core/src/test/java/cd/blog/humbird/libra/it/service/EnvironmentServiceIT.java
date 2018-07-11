@@ -2,7 +2,7 @@ package cd.blog.humbird.libra.it.service;
 
 import cd.blog.humbird.libra.BaseIT;
 import cd.blog.humbird.libra.entity.Environment;
-import cd.blog.humbird.libra.repository.mapper.EnviornmentMapper;
+import cd.blog.humbird.libra.mapper.EnvironmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.testng.annotations.Test;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EnvironmentServiceIT extends BaseIT {
 
     @Autowired
-    EnviornmentMapper mapper;
+    EnvironmentMapper mapper;
 
     @Value("${zk.url}")
     private String url;

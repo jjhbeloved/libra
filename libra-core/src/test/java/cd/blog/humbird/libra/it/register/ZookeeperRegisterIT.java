@@ -6,6 +6,8 @@ import cd.blog.humbird.libra.util.EncodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
+import javax.annotation.PostConstruct;
+
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 /**
@@ -13,8 +15,12 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
  */
 public class ZookeeperRegisterIT extends BaseIT {
 
-    @Autowired
     private ZookeeperRegister zookeeperRegister;
+
+    @PostConstruct
+    private void before() {
+
+    }
 
     @Test
     public void registerContextAndPush() {

@@ -1,22 +1,18 @@
 package cd.blog.humbird.libra.register;
 
 import cd.blog.humbird.libra.exception.ZookeeperRegisterException;
-import cd.blog.humbird.libra.repository.ZookeeperRepository;
+import cd.blog.humbird.libra.mapper.ZKCli;
 import cd.blog.humbird.libra.util.EncodeUtil;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
  * Created by david on 2018/7/11.
  */
-@Component
 public class ZookeeperRegister implements Register {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ZookeeperRegister.class);
@@ -26,11 +22,20 @@ public class ZookeeperRegister implements Register {
     private String contextNode = "CONTEXTVALUE";
     private String timestampNode = "TIMESTAMP";
 
-    private ZookeeperRepository zookeeperRepository;
+    private ZKCli zkCli;
 
-    public ZookeeperRegister(@Value("${zk.url}") String servers, @Value("${zk.namespace}") String namespace) {
+    public ZookeeperRegister(String servers) {
+        this(servers, null);
+    }
+
+    public ZookeeperRegister(String servers, String namespace) {
         this.servers = servers;
-        zookeeperRepository = new ZookeeperRepository(servers, null);
+        zkCli = new ZKCli(servers, namespace);
+    }
+
+    @Override
+    public void init() throws Exception {
+        zkCli.start();
     }
 
     @Override
@@ -93,8 +98,8 @@ public class ZookeeperRegister implements Register {
     public void unregister(String key, String group) {
         try {
             String path = getPath(key, group);
-            if (zookeeperRepository.exists(path)) {
-                zookeeperRepository.deleteAndChildren(path);
+            if (zkCli.exists(path)) {
+                zkCli.deleteAndChildren(path);
             }
         } catch (Exception e) {
             throw new ZookeeperRegisterException("Unregister config[" + key + "/" + group + "] from zookeeper failed.", e);
@@ -110,7 +115,7 @@ public class ZookeeperRegister implements Register {
     public String get(String key, String group) {
         try {
             String path = getPath(key, group);
-            return zookeeperRepository.get(path);
+            return zkCli.get(path);
         } catch (Exception e) {
             LOGGER.warn("Read config[{}/{}] from zookeeper failed.", key, group);
         }
@@ -126,7 +131,7 @@ public class ZookeeperRegister implements Register {
     public String getRemoteDataVersion(String key) {
         String path = this.parentPath + "/" + key;
         try {
-            Stat stat = zookeeperRepository.getStat(path);
+            Stat stat = zkCli.getStat(path);
             return String.format("%s-%s", stat.getMtime(), stat.getVersion());
         } catch (Exception e) {
             LOGGER.warn("get data version from zookeeper fail,error:{}", e);
@@ -151,7 +156,7 @@ public class ZookeeperRegister implements Register {
 
     @Override
     public void destroy() {
-        zookeeperRepository.close();
+        zkCli.close();
     }
 
     private String getPath(String key, String group) {
@@ -175,10 +180,10 @@ public class ZookeeperRegister implements Register {
     }
 
     private void set(String path, byte[] value) throws Exception {
-        if (zookeeperRepository.exists(path)) {
-            zookeeperRepository.set(path, value);
+        if (zkCli.exists(path)) {
+            zkCli.set(path, value);
         } else {
-            zookeeperRepository.create(path, value);
+            zkCli.create(path, value);
         }
     }
 

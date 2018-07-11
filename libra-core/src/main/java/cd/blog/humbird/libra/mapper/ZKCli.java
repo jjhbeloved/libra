@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.repository;
+package cd.blog.humbird.libra.mapper;
 
 import cd.blog.humbird.libra.util.EncodeUtil;
 import org.apache.curator.framework.CuratorFramework;
@@ -13,22 +13,37 @@ import java.util.List;
 /**
  * Created by david on 2018/7/11.
  */
-public class ZookeeperRepository {
+public class ZKCli {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ZookeeperRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZKCli.class);
     private CuratorFramework client;
 
-    public ZookeeperRepository(String server) {
-        this(server, null);
+    public ZKCli(String servers) {
+        this(servers, null);
     }
 
-    public ZookeeperRepository(String server, String namespace) {
+    public ZKCli(String servers, String namespace) {
         try {
             this.client = CuratorFrameworkFactory.builder()
-                    .connectString(server)
+                    .connectString(servers)
                     .retryPolicy(new RetryNTimes(1, 1000))
+                    .sessionTimeoutMs(60000)
+                    .connectionTimeoutMs(30000)
                     .namespace(namespace)
                     .build();
+            this.client.getConnectionStateListenable().addListener((cli, newState) -> {
+                String conn = cli.getZookeeperClient().getCurrentConnectionString();
+                LOGGER.info("libra zookeeper {} state: {}", conn, newState);
+            });
+            this.client.start();
+        } catch (Exception e) {
+            LOGGER.error("failed to initialize zookeeper client", e);
+            throw e;
+        }
+    }
+
+    public void start() throws Exception {
+        try {
             this.client.start();
         } catch (Exception e) {
             LOGGER.error("failed to initialize zookeeper client", e);

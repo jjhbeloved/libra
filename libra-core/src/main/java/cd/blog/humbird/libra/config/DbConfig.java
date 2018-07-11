@@ -24,7 +24,7 @@ import java.util.Properties;
  * Created by david on 2018/7/11.
  */
 @Configuration
-@MapperScan("cd.blog.humbird.libra.repository.mapper")
+@MapperScan("cd.blog.humbird.libra.mapper")
 @EnableTransactionManagement
 public class DbConfig {
 
