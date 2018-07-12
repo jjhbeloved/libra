@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class ZookeeperRegisterFactory implements RegisterFactory {
 
     @Override
-    public Register createRegister(Environment environment) {
+    public Register createRegister(Environment environment) throws Exception {
         String servers = environment.getIps();
         Register register = new ZookeeperRegister(servers);
         try {

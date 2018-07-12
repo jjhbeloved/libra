@@ -10,5 +10,5 @@ CREATE TABLE `environment` (
   `ips` varchar(512) NOT NULL COMMENT 'zookeeper地址',
   `status` tinyint(4) DEFAULT NULL COMMENT '状态，0停用，1启用',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_idx_name` (`name`)
+  UNIQUE KEY `uniq_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8

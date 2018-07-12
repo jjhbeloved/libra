@@ -7,5 +7,7 @@ import cd.blog.humbird.libra.entity.Environment;
  * @since created by on 18/7/12 03:41
  */
 public interface RegisterFactory {
-    Register createRegister(Environment environment);
+
+    Register createRegister(Environment environment) throws Exception;
+
 }

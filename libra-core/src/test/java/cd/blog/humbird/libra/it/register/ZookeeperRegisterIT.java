@@ -1,12 +1,15 @@
 package cd.blog.humbird.libra.it.register;
 
 import cd.blog.humbird.libra.BaseIT;
+import cd.blog.humbird.libra.register.RegisterFactory;
 import cd.blog.humbird.libra.register.ZookeeperRegister;
 import cd.blog.humbird.libra.util.EncodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.testng.annotations.Test;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
@@ -15,11 +18,14 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
  */
 public class ZookeeperRegisterIT extends BaseIT {
 
+    @Resource(name = "zookeeperRegisterFactory")
+    private RegisterFactory registerFactory;
+
     private ZookeeperRegister zookeeperRegister;
 
     @PostConstruct
     private void before() {
-
+//        registerFactory.createRegister();
     }
 
     @Test

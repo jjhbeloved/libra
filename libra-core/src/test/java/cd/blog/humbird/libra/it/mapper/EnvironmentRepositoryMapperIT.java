@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.it.service;
+package cd.blog.humbird.libra.it.mapper;
 
 import cd.blog.humbird.libra.BaseIT;
 import cd.blog.humbird.libra.entity.Environment;
@@ -10,9 +10,9 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by david on 2018/7/11.
+ * Created by david on 2018/7/12.
  */
-public class EnvironmentServiceIT extends BaseIT {
+public class EnvironmentRepositoryMapperIT extends BaseIT {
 
     @Autowired
     EnvironmentMapper mapper;
@@ -37,6 +37,6 @@ public class EnvironmentServiceIT extends BaseIT {
         assertThat(mapper.findByID(id).getName()).isEqualTo("xv");
         mapper.delete(id);
         assertThat(mapper.findAll()).isEmpty();
-
     }
+
 }

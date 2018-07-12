@@ -3,6 +3,9 @@ package cd.blog.humbird.libra.register;
 import cd.blog.humbird.libra.exception.ZookeeperRegisterException;
 import cd.blog.humbird.libra.mapper.ZKCli;
 import cd.blog.humbird.libra.util.EncodeUtil;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.RetryNTimes;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,7 @@ public class ZookeeperRegister implements Register {
     private static final Logger LOGGER = LoggerFactory.getLogger(ZookeeperRegister.class);
 
     private String servers;
+    private String namespace;
     private String parentPath = "/HUMBIRD/LIBRA";
     private String contextNode = "CONTEXTVALUE";
     private String timestampNode = "TIMESTAMP";
@@ -30,6 +34,7 @@ public class ZookeeperRegister implements Register {
 
     public ZookeeperRegister(String servers, String namespace) {
         this.servers = servers;
+        this.namespace = namespace;
         zkCli = new ZKCli(servers, namespace);
     }
 

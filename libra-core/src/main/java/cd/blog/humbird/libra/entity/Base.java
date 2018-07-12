@@ -3,12 +3,13 @@ package cd.blog.humbird.libra.entity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by david on 2018/7/11.
  */
-public abstract class Base {
+public abstract class Base implements Serializable {
 
     private long id;
 
