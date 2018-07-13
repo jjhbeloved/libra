@@ -3,7 +3,7 @@ package cd.blog.humbird.libra.entity;
 /**
  * Created by david on 2018/7/11.
  */
-public class Environment extends Base {
+public class Environment extends BaseEntity {
 
     private String name;
     private String label;

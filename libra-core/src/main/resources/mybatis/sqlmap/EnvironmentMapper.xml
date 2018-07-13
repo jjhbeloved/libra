@@ -27,23 +27,22 @@
         ORDER BY id
     </select>
 
-    <select id="findByName" resultMap="BaseResult" parameterType="java.lang.String">
+    <select id="findByName" resultMap="BaseResult">
         SELECT *
         FROM environment
         WHERE name = #{name}
     </select>
 
-    <insert id="create" parameterType="cd.blog.humbird.libra.entity.Environment" useGeneratedKeys="true"
+    <insert id="create" useGeneratedKeys="true"
             keyProperty="id">
-        insert into environment (gmt_created, gmt_modified, creator, modifier, version, name, label, ips, status)
+        insert into environment (gmt_created, gmt_modified, creator, modifier,
+                                 version, name, label, ips, status)
         values (NOW(), NOW(), #{creator}, #{modifier}, #{version}, #{name}, #{label}, #{ips}, #{status})
     </insert>
 
-    <update id="update" parameterType="cd.blog.humbird.libra.entity.Environment">
+    <update id="update">
         update environment
         set ips          = #{ips},
-            label        = #{label},
-            name         = #{name},
             status       = #{status},
             version      = #{version} + 1,
             modifier     = #{modifier},

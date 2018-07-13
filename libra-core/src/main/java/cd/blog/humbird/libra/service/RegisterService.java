@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.manager;
+package cd.blog.humbird.libra.service;
 
 import cd.blog.humbird.libra.entity.Environment;
 import cd.blog.humbird.libra.register.Register;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * Created by david on 2018/7/12.
  */
 @Component
-public class RegisterManager {
+public class RegisterService {
 
     @Autowired
     private RegisterRepository registerRepository;

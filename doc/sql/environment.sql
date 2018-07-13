@@ -11,4 +11,12 @@ CREATE TABLE `environment` (
   `status` tinyint(4) DEFAULT NULL COMMENT '状态，0停用，1启用',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+
+-- 初始化缓存数据
+insert into environment(creator, modifier, version, name, label, ips, status)
+values
+('david', 'david', '0', 'dev', 'DEV', 'zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181', '0');
+insert into environment(creator, modifier, version, name, label, ips, status)
+values
+('david', 'david', '0', 'test', 'TEST', 'zk1.test.pajkdc.com:2181,zk2.test.pajkdc.com:2181,zk3.test.pajkdc.com:2181', '0');

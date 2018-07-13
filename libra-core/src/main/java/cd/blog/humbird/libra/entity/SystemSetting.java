@@ -3,7 +3,7 @@ package cd.blog.humbird.libra.entity;
 /**
  * Created by david on 2018/7/12.
  */
-public class SystemSetting extends Base {
+public class SystemSetting extends BaseEntity {
 
     private String key;
 

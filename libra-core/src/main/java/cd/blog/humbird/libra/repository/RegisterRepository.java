@@ -1,14 +1,13 @@
 package cd.blog.humbird.libra.repository;
 
 import cd.blog.humbird.libra.entity.Environment;
-import cd.blog.humbird.libra.exception.RegisterException;
 import cd.blog.humbird.libra.register.Register;
 import cd.blog.humbird.libra.register.RegisterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.Set;
@@ -19,8 +18,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author david
  * @since created by on 18/7/12 03:29
  */
-@Lazy
-@Component
+@Repository
 public class RegisterRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RegisterRepository.class);

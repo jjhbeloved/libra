@@ -35,7 +35,6 @@ public class ZKCli {
                 String conn = cli.getZookeeperClient().getCurrentConnectionString();
                 LOGGER.info("libra zookeeper {} state: {}", conn, newState);
             });
-            this.client.start();
         } catch (Exception e) {
             LOGGER.error("failed to initialize zookeeper client", e);
             throw e;
