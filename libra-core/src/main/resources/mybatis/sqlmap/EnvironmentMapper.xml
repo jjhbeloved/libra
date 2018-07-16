@@ -20,7 +20,7 @@
         ORDER BY id
     </select>
 
-    <select id="findByID" resultMap="BaseResult">
+    <select id="findById" resultMap="BaseResult">
         SELECT *
         FROM environment
         WHERE id = #{id}

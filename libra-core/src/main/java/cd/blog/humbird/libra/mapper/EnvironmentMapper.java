@@ -11,7 +11,7 @@ public interface EnvironmentMapper {
 
     List<Environment> findAll();
 
-    Environment findByID(long id);
+    Environment findById(long id);
 
     Environment findByName(String name);
 

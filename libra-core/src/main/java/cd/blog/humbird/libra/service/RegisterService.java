@@ -1,11 +1,11 @@
 package cd.blog.humbird.libra.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by david on 2018/7/12.
  */
-@Component
+@Service
 public class RegisterService {
 
 //    @Autowired

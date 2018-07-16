@@ -34,7 +34,7 @@ public class EnvironmentRepositoryMapperIT extends BaseIT {
         Environment rs = mapper.findByName(environment.getName());
         rs.setName("xv");
         mapper.update(rs);
-        assertThat(mapper.findByID(id).getName()).isEqualTo("xv");
+        assertThat(mapper.findById(id).getName()).isEqualTo("xv");
         mapper.delete(id);
         assertThat(mapper.findAll()).isEmpty();
     }
