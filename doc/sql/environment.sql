@@ -1,3 +1,4 @@
+-- 环境配置表
 CREATE TABLE `environment` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `gmt_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

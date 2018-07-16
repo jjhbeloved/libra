@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.service;
 
 import cd.blog.humbird.libra.entity.Environment;
-import cd.blog.humbird.libra.helper.EnvironmentHelper;
+import cd.blog.humbird.libra.helper.StatusHelper;
 import cd.blog.humbird.libra.register.Register;
 import cd.blog.humbird.libra.repository.EnvironmentRepository;
 import cd.blog.humbird.libra.repository.RegisterRepository;
@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -41,22 +41,22 @@ public class EnvironmentService {
     @PostConstruct
     public void init() {
         List<Environment> environments = environmentRepository.findAll();
-        new Thread(() -> {
-            if (!CollectionUtils.isEmpty(environments)) {
-                for (Environment environment : environments) {
-                    if (EnvironmentHelper.IS_USED.test(environment)) {
-                        Register register = registerRepository.createRegister(environment);
-                        if (register == null) {
-                            LOGGER.error("Build config register service[envLabel={}] failed while environment initialize",
-                                    environment.getLabel());
-                        }
-                    } else {
-                        LOGGER.info("Environment [envId:{},envLabel={}] is closed.",
-                                environment.getId(), environment.getLabel());
+//        new Thread(() -> { // 使用线程可能会造成 线程未执行完之前,注册缓存数据不全
+        if (!CollectionUtils.isEmpty(environments)) {
+            for (Environment environment : environments) {
+                if (StatusHelper.IS_ENV_USED.test(environment)) {
+                    Register register = registerRepository.createRegister(environment);
+                    if (register == null) {
+                        LOGGER.error("Build config register service[envLabel={}] failed while environment initialize",
+                                environment.getLabel());
                     }
+                } else {
+                    LOGGER.info("Environment [envId:{},envLabel={}] is closed.",
+                            environment.getId(), environment.getLabel());
                 }
             }
-        }).start();
+        }
+//        }).start();
     }
 
 
@@ -76,6 +76,12 @@ public class EnvironmentService {
         return envs;
     }
 
+    /**
+     * 1. 查询所有环境信息
+     * 2. 只注册在线的环境信息
+     *
+     * @return 所有环境信息
+     */
     public List<Environment> findAllAndrefresh() {
         List<Environment> environments = findAll();
         refreshRegisters(environments);
@@ -139,8 +145,10 @@ public class EnvironmentService {
         for (Long envId : needRemoveEnvIds) {
             registerRepository.removeRegister(envId);
         }
-        for (Long envId : needCreateEnvIds) {
-            registerRepository.createRegister(allEnvs.get(envId));
-        }
+        needCreateEnvIds.stream()
+                .map(allEnvs::get)
+                .filter(Objects::nonNull)
+                .filter(StatusHelper.IS_ENV_USED)
+                .forEach(environment -> registerRepository.createRegister(environment));
     }
 }

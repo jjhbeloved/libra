@@ -15,7 +15,7 @@ public interface EnvironmentMapper {
 
     Environment findByName(String name);
 
-    void create(Environment environment);
+    void insert(Environment environment);
 
     void update(Environment environment);
 

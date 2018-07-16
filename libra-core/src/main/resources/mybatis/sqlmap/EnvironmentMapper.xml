@@ -33,7 +33,7 @@
         WHERE name = #{name}
     </select>
 
-    <insert id="create" useGeneratedKeys="true"
+    <insert id="insert" useGeneratedKeys="true"
             keyProperty="id">
         insert into environment (gmt_created, gmt_modified, creator, modifier,
                                  version, name, label, ips, status)

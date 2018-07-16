@@ -13,10 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.function.Predicate;
+
+import static cd.blog.humbird.libra.helper.StatusHelper.IS_ENV_USED;
 
 /**
  * 每个环境都对应一个注册管理器
@@ -28,7 +30,6 @@ public class EnvironmentRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EnvironmentRepository.class);
     private static final String CACHE_ENV_LIST = "cache_env_list";
-    private static final Predicate<Environment> IS_ONLINE = v -> v.getStatus() == 0;
 
     @Autowired
     private EnvironmentMapper environmentMapper;
@@ -81,15 +82,16 @@ public class EnvironmentRepository {
         return null;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public long create(Environment environment) {
         try {
             User user = UserUtil.getUser();
             environment.setCreator(user.getName());
             environment.setModifier(user.getName());
-            environmentMapper.create(environment);
+            environmentMapper.insert(environment);
             long id = environment.getId();
-            String content = String.format("创建%s环境,IP:%s,是否上线:%s",
-                    environment.getLabel(), environment.getIps(), IS_ONLINE.test(environment)
+            String content = String.format("创建%s环境,[IP:%s,是否上线:%s]",
+                    environment.getLabel(), environment.getIps(), IS_ENV_USED.test(environment)
             );
             opLogRepository.insert(new OpLog(OpLogTypeEnum.Env_Add.getValue(), user.getId(), user.getFrIp(), id, null, content));
             return id;
@@ -112,7 +114,7 @@ public class EnvironmentRepository {
             if (existsEnv != null) {
                 environmentMapper.update(environment);
                 String content = String.format("编辑%s环境,[IP:%s,是否上线:%s]->[IP:%s,是否上线:%s]",
-                        existsEnv.getLabel(), existsEnv.getIps(), IS_ONLINE.test(existsEnv), environment.getIps(), IS_ONLINE.test(environment)
+                        existsEnv.getLabel(), existsEnv.getIps(), IS_ENV_USED.test(existsEnv), environment.getIps(), IS_ENV_USED.test(environment)
                 );
                 opLogRepository.insert(new OpLog(OpLogTypeEnum.Env_Edit.getValue(), user.getId(), user.getFrIp(), id, null, content));
             }

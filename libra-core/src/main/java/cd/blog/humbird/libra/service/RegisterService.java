@@ -1,10 +1,5 @@
 package cd.blog.humbird.libra.service;
 
-import cd.blog.humbird.libra.entity.Environment;
-import cd.blog.humbird.libra.register.Register;
-import cd.blog.humbird.libra.repository.EnvironmentRepository;
-import cd.blog.humbird.libra.repository.RegisterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,27 +8,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class RegisterService {
 
-    @Autowired
-    private RegisterRepository registerRepository;
+//    @Autowired
+//    private RegisterRepository registerRepository;
+//
+//    @Autowired
+//    private EnvironmentRepository environmentRepository;
 
-    @Autowired
-    private EnvironmentRepository environmentRepository;
-
-    /**
-     * 根据环境Id创建注册器
-     * 如果不存在, 创建新的注册器
-     *
-     * @param envId
-     * @return
-     * @throws Exception
-     */
-    public Register createRegister(long envId) {
-        Register register = registerRepository.getRegister(envId);
-        if (register != null) {
-            return register;
-        } else {
-            Environment environment = environmentRepository.findById(envId);
-            return registerRepository.createRegister(environment);
-        }
-    }
+//    /**
+//     * 根据环境Id创建注册器
+//     * 如果不存在, 创建新的注册器
+//     *
+//     * @param envId
+//     * @return
+//     * @throws Exception
+//     */
+//    public Register createRegister(long envId) {
+//        Register register = registerRepository.getRegister(envId);
+//        if (register != null) {
+//            return register;
+//        } else {
+//            Environment environment = environmentRepository.findById(envId);
+//            if (!StatusHelper.IS_USED.test(environment)) {
+//                return null;
+//            }
+//            return registerRepository.createRegister(environment);
+//        }
+//    }
 }

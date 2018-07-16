@@ -29,7 +29,7 @@ public class EnvironmentRepositoryMapperIT extends BaseIT {
         environment.setStatus(0);
         environment.setCreator("david");
         environment.setModifier("david");
-        mapper.create(environment);
+        mapper.insert(environment);
         long id = environment.getId();
         Environment rs = mapper.findByName(environment.getName());
         rs.setName("xv");

@@ -24,13 +24,13 @@ public class OpLogRepository {
 
     public PageInfo<OpLog> getLogs(OpLogCriteria criteria, PageInfo<OpLog> page) {
         long totalCount = opLogMapper.count(criteria, page);
-        List<OpLog> opLogs = opLogMapper.getLogs(criteria, page);
+        List<OpLog> opLogs = opLogMapper.findLogs(criteria, page);
         page.setTotal(totalCount);
         page.setList(opLogs);
         return page;
     }
 
     public String getLogKey(long id, String keyName) {
-        return opLogMapper.getLogKey(id, keyName);
+        return opLogMapper.findLogKey(id, keyName);
     }
 }

@@ -6,6 +6,7 @@ import java.util.Date;
  * Created by david on 2018/7/13.
  */
 public class OpLog extends BaseEntity {
+
     private int opType;
 
     private long opUserId;
@@ -26,6 +27,10 @@ public class OpLog extends BaseEntity {
     private String key4;
     private String key5;
     private String key6;
+
+    public OpLog(int opType, long opUserId, String content) {
+        this(opType, opUserId, null, null, null, content);
+    }
 
     public OpLog(int opType, long opUserId, String opUserIp, Long envId, Long projectId, String content) {
         this.opType = opType;

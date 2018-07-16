@@ -7,7 +7,12 @@ public enum OpLogTypeEnum {
     Env_All("环境管理", 701, 720, false),
     Env_Add("环境-新增", 705, false),
     Env_Delete("环境-删除", 706, false),
-    Env_Edit("环境-修改", 707, false);
+    Env_Edit("环境-修改", 707, false),
+
+    User_All("User管理", 901, 920, false),
+    User_Add("User-新增", 905, false),
+    User_Delete("User-删除", 906, false),
+    User_Edit("User-修改", 907, false);
 
     private String label;
     private int begin;

@@ -1,3 +1,4 @@
+-- 操作日指标
 CREATE TABLE `op_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `opType` int(10) DEFAULT NULL COMMENT '操作类型',

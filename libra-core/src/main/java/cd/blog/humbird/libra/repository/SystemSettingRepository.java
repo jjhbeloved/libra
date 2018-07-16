@@ -23,7 +23,7 @@ public class SystemSettingRepository {
     public String getVal(String key) {
         String v = cache.get(key, String.class);
         if (!StringUtils.hasText(v)) {
-            v = systemSettingMapper.getByKey(key);
+            v = systemSettingMapper.findByKey(key);
             if (StringUtils.hasText(v)) {
                 cache.put(key, v);
             }

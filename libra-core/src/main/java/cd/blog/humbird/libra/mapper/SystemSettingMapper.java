@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface SystemSettingMapper {
 
-    void update(@Param("key") String key, @Param("value") String value);
+    String findByKey(String key);
 
-    String getByKey(String key);
+    void update(@Param("key") String key, @Param("value") String value);
 
 }

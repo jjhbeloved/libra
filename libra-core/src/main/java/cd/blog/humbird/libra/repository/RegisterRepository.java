@@ -6,7 +6,6 @@ import cd.blog.humbird.libra.register.RegisterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -54,6 +53,11 @@ public class RegisterRepository {
         return registers.get(envId);
     }
 
+    /**
+     * 获取所有的注册环境信息
+     *
+     * @return
+     */
     public Set<Long> getRegisterEnvIds() {
         return registers.keySet();
     }
