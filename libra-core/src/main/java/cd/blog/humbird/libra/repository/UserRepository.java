@@ -32,7 +32,7 @@ public class UserRepository {
     @Autowired
     private OpLogRepository opLogRepository;
 
-    @Resource(name = "caffeineClusterCache")
+    @Resource(name = "caffeineClusterUserCache")
     private Cache cache;
 
     public PageInfo<User> getUsers(UserCriteria user, int pageNum, int pageSize) {
@@ -83,8 +83,8 @@ public class UserRepository {
     public long create(User user) {
         try {
             cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
-            user.setCreator(user.getName());
-            user.setModifier(user.getName());
+            user.setCreator(u.getName());
+            user.setModifier(u.getName());
             userMapper.insert(user);
             long id = user.getId();
             String content = String.format("创建%s用户,[邮箱:%s,是否上线:%s]",
@@ -101,8 +101,8 @@ public class UserRepository {
         try {
             long id = user.getId();
             User existsUser = findById(id);
-            cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
             if (existsUser != null) {
+                cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
                 user.setModifier(u.getName());
                 userMapper.update(user);
                 String content = String.format("编辑%s用户,[邮箱:%s,是否上线:%s]->[邮箱:%s,是否上线:%s]",

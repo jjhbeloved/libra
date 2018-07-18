@@ -107,14 +107,14 @@ public class EnvironmentRepository {
         try {
             long id = environment.getId();
             Environment existsEnv = findById(id);
-            User user = UserUtil.getUser();
+            User u = UserUtil.getUser();
             if (existsEnv != null) {
-                environment.setModifier(user.getName());
+                environment.setModifier(u.getName());
                 environmentMapper.update(environment);
                 String content = String.format("编辑%s环境,[IP:%s,是否上线:%s]->[IP:%s,是否上线:%s]",
                         existsEnv.getLabel(), existsEnv.getIps(), IS_ENV_USED.test(existsEnv), environment.getIps(), IS_ENV_USED.test(environment)
                 );
-                opLogRepository.insert(new OpLog(OpLogTypeEnum.Env_Edit.getValue(), user.getId(), user.getFrIp(), id, null, content));
+                opLogRepository.insert(new OpLog(OpLogTypeEnum.Env_Edit.getValue(), u.getId(), u.getFrIp(), id, null, content));
             }
         } finally {
             cache.evict(CACHE_ENV_ + "list");

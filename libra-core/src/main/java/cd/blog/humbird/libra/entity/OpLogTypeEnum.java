@@ -9,6 +9,17 @@ public enum OpLogTypeEnum {
     Env_Delete("环境-删除", 706, false),
     Env_Edit("环境-修改", 707, false),
 
+    TPP_All("Team/Product/Project管理", 801, 820, false),
+    Team_Add("Team-新增", 805, false),
+    Team_Delete("Team-删除", 806, false),
+    Team_Edit("Team-修改", 807, false),
+    Product_Add("Product-新增", 808, false),
+    Product_Delete("Product-删除", 809, false),
+    Product_Edit("Product-修改", 810, false),
+    Project_Add("Project-新增", 811, false),
+    Project_Delete("Project-删除", 812, false),
+    Project_Edit("Project-修改", 813, false),
+
     User_All("User管理", 901, 920, false),
     User_Add("User-新增", 905, false),
     User_Delete("User-删除", 906, false),

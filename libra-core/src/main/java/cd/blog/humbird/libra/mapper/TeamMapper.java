@@ -1,9 +1,6 @@
 package cd.blog.humbird.libra.mapper;
 
 import cd.blog.humbird.libra.entity.Team;
-import cd.blog.humbird.libra.entity.User;
-import cd.blog.humbird.libra.model.vo.UserCriteria;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

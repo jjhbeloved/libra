@@ -11,15 +11,21 @@ import org.springframework.context.annotation.Configuration;
 public class ClusterCache extends BaseCache {
 
     private static final String CLUSTER = "clusterCache";
+    private static final String CLUSTER_USER = "clusterUserCache";
     private static final String CLUSTER_SHORT = "clusterShortCache";
 
     @Bean
     public Cache caffeineClusterCache() {
-        return createCaffeineCache(CLUSTER);
+        return createCaffeineCache(CLUSTER, 1000, 1800);
+    }
+
+    @Bean
+    public Cache caffeineClusterUserCache() {
+        return createCaffeineCache(CLUSTER_USER, 20000, 1800);
     }
 
     @Bean
     public Cache caffeineClusterShortCache() {
-        return createCaffeineCache(CLUSTER_SHORT);
+        return createCaffeineCache(CLUSTER_SHORT, MAX_SIZE, TIMEOUT);
     }
 }

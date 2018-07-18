@@ -5,7 +5,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
-import org.springframework.context.annotation.Bean;
 
 import javax.annotation.Resource;
 
@@ -23,10 +22,10 @@ public abstract class BaseCache {
     @Resource(name = "caffeineCacheManager")
     private CacheManager caffeineCacheManager;
 
-    public Cache createCaffeineCache(String name) {
+    public Cache createCaffeineCache(String name, long maxSize, long timeout) {
         CaffeineCacheManager manager = ((CaffeineCacheManager) caffeineCacheManager);
         String key = PREFIX_CAFFEINE + name;
-        Caffeine<Object, Object> caffeine = CaffeineCacheConfig.buildCache(key, TIMEOUT, MAX_SIZE);
+        Caffeine<Object, Object> caffeine = CaffeineCacheConfig.buildCache(key, timeout, maxSize);
         manager.setCaffeine(caffeine);
         return manager.getCache(key);
     }
