@@ -3,6 +3,7 @@ package cd.blog.humbird.libra.repository;
 import cd.blog.humbird.libra.entity.OpLog;
 import cd.blog.humbird.libra.mapper.OpLogMapper;
 import cd.blog.humbird.libra.model.vo.OpLogCriteria;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +31,10 @@ public class OpLogRepository {
         }
     }
 
-    public PageInfo<OpLog> getLogs(OpLogCriteria criteria, PageInfo<OpLog> page) {
-        long totalCount = opLogMapper.count(criteria, page);
-        List<OpLog> opLogs = opLogMapper.findLogs(criteria, page);
-        page.setTotal(totalCount);
-        page.setList(opLogs);
-        return page;
+    public PageInfo<OpLog> getLogs(OpLogCriteria criteria, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<OpLog> opLogs = opLogMapper.findLogs(criteria);
+        return new PageInfo<>(opLogs);
     }
 
     public String getLogKey(long id, String keyName) {

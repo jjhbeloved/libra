@@ -67,15 +67,6 @@ public class EnvironmentService {
         return environmentRepository.findAll();
     }
 
-    public Map<Long, Environment> findAllMap() {
-        List<Environment> environments = findAll();
-        Map<Long, Environment> envs = Maps.newLinkedHashMap();
-        for (Environment env : environments) {
-            envs.put(env.getId(), env);
-        }
-        return envs;
-    }
-
     /**
      * 1. 查询所有环境信息
      * 2. 只注册在线的环境信息

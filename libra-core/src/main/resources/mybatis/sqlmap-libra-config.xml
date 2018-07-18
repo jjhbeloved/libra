@@ -26,16 +26,16 @@
         <setting name="defaultStatementTimeout" value="25000"/>
     </settings>
 
-    <!--<plugins>-->
-    <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->
-    <!--<property name="dialect" value="mysql"/>-->
-    <!--<property name="offsetAsPageNum" value="false"/>-->
-    <!--<property name="rowBoundsWithCount" value="false"/>-->
-    <!--<property name="pageSizeZero" value="true"/>-->
-    <!--<property name="reasonable" value="false"/>-->
-    <!--<property name="supportMethodsArguments" value="false"/>-->
-    <!--<property name="returnPageInfo" value="none"/>-->
-    <!--</plugin>-->
-    <!-- <plugin interceptor="com.chrhc.mybatis.locker.interceptor.OptimisticLocker"/>-->
-    <!--</plugins>-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+            <property name="offsetAsPageNum" value="false"/>
+            <property name="rowBoundsWithCount" value="false"/>
+            <property name="pageSizeZero" value="true"/>
+            <property name="reasonable" value="false"/>
+            <property name="supportMethodsArguments" value="false"/>
+            <property name="returnPageInfo" value="none"/>
+        </plugin>
+        <!--<plugin interceptor="com.chrhc.mybatis.locker.interceptor.OptimisticLocker"/>-->
+    </plugins>
 </configuration>

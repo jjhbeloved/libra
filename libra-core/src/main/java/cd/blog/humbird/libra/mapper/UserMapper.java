@@ -1,8 +1,8 @@
 package cd.blog.humbird.libra.mapper;
 
-import cd.blog.humbird.libra.entity.OpLog;
 import cd.blog.humbird.libra.entity.User;
-import com.github.pagehelper.PageInfo;
+import cd.blog.humbird.libra.model.vo.UserCriteria;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,15 +13,13 @@ public interface UserMapper {
 
     List<User> findAll();
 
-    long count(User criteria, PageInfo<User> page);
+    List<User> findUsers(@Param("criteria") UserCriteria criteria);
 
     User findById(long id);
 
     User findByName(String name);
 
-    User findByNameOrLoginNameLike(String name, boolean includeAdmin);
-
-    List<User> findUsers(User criteria, PageInfo<User> page);
+    List<User> findByNameOrLoginNameLike(@Param("name") String name, @Param("includeAdmin") boolean includeAdmin);
 
     void insert(User user);
 

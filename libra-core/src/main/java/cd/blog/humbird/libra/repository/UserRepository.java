@@ -1,21 +1,21 @@
 package cd.blog.humbird.libra.repository;
 
-import cd.blog.humbird.libra.entity.Environment;
 import cd.blog.humbird.libra.entity.OpLog;
 import cd.blog.humbird.libra.entity.OpLogTypeEnum;
 import cd.blog.humbird.libra.entity.User;
 import cd.blog.humbird.libra.mapper.UserMapper;
+import cd.blog.humbird.libra.model.vo.UserCriteria;
 import cd.blog.humbird.libra.util.UserUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-import static cd.blog.humbird.libra.helper.StatusHelper.IS_ENV_USED;
 import static cd.blog.humbird.libra.helper.StatusHelper.IS_USER_USED;
 
 /**
@@ -34,6 +34,12 @@ public class UserRepository {
 
     @Resource(name = "caffeineClusterCache")
     private Cache cache;
+
+    public PageInfo<User> getUsers(UserCriteria user, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<User> users = userMapper.findUsers(user);
+        return new PageInfo<>(users);
+    }
 
     public List<User> findAll() {
         List<User> users = cache.get(CACHE_USER_ + "list", List.class);

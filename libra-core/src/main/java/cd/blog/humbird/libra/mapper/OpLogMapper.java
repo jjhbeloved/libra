@@ -14,9 +14,7 @@ public interface OpLogMapper {
 
     void insert(OpLog opLog);
 
-    long count(OpLogCriteria criteria, PageInfo<OpLog> page);
-
-    List<OpLog> findLogs(OpLogCriteria criteria, PageInfo<OpLog> page);
+    List<OpLog> findLogs(@Param("criteria") OpLogCriteria criteria);
 
     /**
      * 指定查询的keyName
@@ -25,6 +23,6 @@ public interface OpLogMapper {
      * @param keyName
      * @return
      */
-    String findLogKey(long id, String keyName);
+    String findLogKey(@Param("id") long id, @Param("keyName") String keyName);
 
 }

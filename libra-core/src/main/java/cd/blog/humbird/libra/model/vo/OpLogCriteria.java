@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * Created by david on 2018/7/13.
  */
-public class OpLogCriteria extends BaseEntity {
+public class OpLogCriteria extends BaseVO {
 
     private Integer opTypeStart;
     private Integer opTypeEnd;
