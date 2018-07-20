@@ -23,7 +23,7 @@ public class TeamRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(EnvironmentRepository.class);
     private static final String CACHE_TEAM_ = "cache_team_";
 
-    @Resource(name = "caffeineClusterCache")
+    @Resource(name = "localClusterCache")
     private Cache cache;
 
     @Autowired

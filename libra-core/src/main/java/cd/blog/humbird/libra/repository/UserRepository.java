@@ -32,7 +32,7 @@ public class UserRepository {
     @Autowired
     private OpLogRepository opLogRepository;
 
-    @Resource(name = "caffeineClusterUserCache")
+    @Resource(name = "localClusterUserCache")
     private Cache cache;
 
     public PageInfo<User> getUsers(UserCriteria user, int pageNum, int pageSize) {
@@ -50,7 +50,7 @@ public class UserRepository {
             users = cache.get(CACHE_USER_ + "list", List.class);
             if (CollectionUtils.isEmpty(users)) {
                 users = userMapper.findAll();
-                cache.put(CACHE_USER_ + "list", users);
+                cache.putIfAbsent(CACHE_USER_ + "list", users);
             }
         }
         return users;
@@ -116,16 +116,17 @@ public class UserRepository {
     }
 
     public void delete(long id) {
+        User user = findById(id);
+        if (user == null) {
+            return;
+        }
         try {
-            User user = findById(id);
-            if (user != null) {
-                cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
-                userMapper.delete(id);
-                String content = String.format("删除%s用户",
-                        user.getLoginName()
-                );
-                opLogRepository.insert(new OpLog(OpLogTypeEnum.User_Delete.getValue(), u.getId(), content));
-            }
+            cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
+            userMapper.delete(id);
+            String content = String.format("删除%s用户",
+                    user.getLoginName()
+            );
+            opLogRepository.insert(new OpLog(OpLogTypeEnum.User_Delete.getValue(), u.getId(), content));
         } finally {
             cache.evict(CACHE_USER_ + "list");
         }

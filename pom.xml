@@ -81,6 +81,11 @@
                 <artifactId>spring-context-support</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aspects</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
 
             <!-- 第三方组件 -->
             <dependency>

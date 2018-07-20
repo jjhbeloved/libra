@@ -17,7 +17,7 @@ public class SystemSettingRepository {
     @Autowired
     private SystemSettingMapper systemSettingMapper;
 
-    @Resource(name = "caffeineClusterCache")
+    @Resource(name = "localClusterCache")
     private Cache cache;
 
     public String getVal(String key) {

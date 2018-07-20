@@ -1,7 +1,9 @@
 package cd.blog.humbird.libra.mapper;
 
 import cd.blog.humbird.libra.entity.Config;
+import cd.blog.humbird.libra.entity.ConfigInstance;
 import cd.blog.humbird.libra.model.vo.ConfigCriteria;
+import cd.blog.humbird.libra.model.vo.ConfigInstanceCriteria;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,7 +15,7 @@ public interface ConfigMapper {
 
     Config findConfigById(long id);
 
-    Config findByKeyAndProjectId(@Param("key") String key, @Param("projectId") long projectId);
+    Config findConfigByKeyAndProjectId(@Param("key") String key, @Param("projectId") long projectId);
 
     List<Config> findConfigByKey(String key);
 
@@ -25,10 +27,25 @@ public interface ConfigMapper {
 
     List<Config> findConfigs(@Param("criteria") ConfigCriteria criteria);
 
-    void insert(Config config);
+    void insertConfig(Config config);
 
-    void update(Config config);
+    void updateConfig(Config config);
 
-    void delete(long id);
+    void deleteConfig(long id);
 
+    // ################ config instance #################
+
+    ConfigInstance findConfigInstanceById(long id);
+
+    List<ConfigInstance> findConfigInstanceByCreatorId(long creatorId);
+
+    ConfigInstance findConfigInstanceByConfigIdAndEnvId(@Param("configId") long configId, @Param("envId") long envId);
+
+    List<ConfigInstance> findConfigInstances(@Param("criteria") ConfigInstanceCriteria criteria);
+
+    void insertConfigInstance(ConfigInstance configInstance);
+
+    void updateConfigInstance(ConfigInstance configInstance);
+
+    void deleteConfigInstance(long id);
 }

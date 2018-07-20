@@ -13,11 +13,11 @@ public class User extends BaseEntity {
 
     private String email;
 
-    private Integer admin;
+    private int admin;
 
-    private Integer locked;
+    private int locked;
 
-    private Integer status;
+    private int status;
 
     public String getLoginName() {
         return loginName;
@@ -51,27 +51,27 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public Integer getAdmin() {
+    public int getAdmin() {
         return admin;
     }
 
-    public void setAdmin(Integer admin) {
+    public void setAdmin(int admin) {
         this.admin = admin;
     }
 
-    public Integer getLocked() {
+    public int getLocked() {
         return locked;
     }
 
-    public void setLocked(Integer locked) {
+    public void setLocked(int locked) {
         this.locked = locked;
     }
 
-    public Integer getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 }

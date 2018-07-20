@@ -15,17 +15,17 @@ public class ClusterCache extends BaseCache {
     private static final String CLUSTER_SHORT = "clusterShortCache";
 
     @Bean
-    public Cache caffeineClusterCache() {
+    public Cache localClusterCache() {
         return createCaffeineCache(CLUSTER, 1000, 1800);
     }
 
     @Bean
-    public Cache caffeineClusterUserCache() {
+    public Cache localClusterUserCache() {
         return createCaffeineCache(CLUSTER_USER, 20000, 1800);
     }
 
     @Bean
-    public Cache caffeineClusterShortCache() {
-        return createCaffeineCache(CLUSTER_SHORT, MAX_SIZE, TIMEOUT);
+    public Cache localClusterShortCache() {
+        return createCaffeineCache(CLUSTER_SHORT, 10000, 600);
     }
 }

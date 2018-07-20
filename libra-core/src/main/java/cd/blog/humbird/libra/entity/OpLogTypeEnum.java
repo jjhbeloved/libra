@@ -4,6 +4,13 @@ package cd.blog.humbird.libra.entity;
  * Created by david on 2018/7/13.
  */
 public enum OpLogTypeEnum {
+    Config_All("配置管理", 1, 20, true),
+    Config_Add("配置-添加", 5, true),
+    Config_Delete("配置-删除", 8, true),
+    Config_Edit("配置-设置", 11, true),
+    Config_EditAttr("配置-设置属性", 14, true),
+    Config_Clear("配置-清除", 17, true),
+
     Env_All("环境管理", 701, 720, false),
     Env_Add("环境-新增", 705, false),
     Env_Delete("环境-删除", 706, false),

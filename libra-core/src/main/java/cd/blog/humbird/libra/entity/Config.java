@@ -9,13 +9,13 @@ public class Config extends BaseEntity {
 
     private String desc;
 
-    private Integer type;
+    private int type;
 
-    private Long projectId;
+    private long projectId;
 
-    private Integer pri;
+    private int pri;
 
-    private Long creatorId;
+    private long creatorId;
 
     public String getKey() {
         return key;
@@ -33,36 +33,35 @@ public class Config extends BaseEntity {
         this.desc = desc;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 
-    public Long getProjectId() {
+    public long getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Long projectId) {
+    public void setProjectId(long projectId) {
         this.projectId = projectId;
     }
 
-    public Integer getPri() {
+    public int getPri() {
         return pri;
     }
 
-    public void setPri(Integer pri) {
+    public void setPri(int pri) {
         this.pri = pri;
     }
 
-    public Long getCreatorId() {
+    public long getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(Long creatorId) {
+    public void setCreatorId(long creatorId) {
         this.creatorId = creatorId;
     }
-
 }

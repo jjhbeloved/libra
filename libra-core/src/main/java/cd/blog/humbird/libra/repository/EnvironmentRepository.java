@@ -37,7 +37,7 @@ public class EnvironmentRepository {
     @Autowired
     private OpLogRepository opLogRepository;
 
-    @Resource(name = "caffeineClusterCache")
+    @Resource(name = "localClusterCache")
     private Cache cache;
 
     public List<Environment> findAll() {
@@ -59,11 +59,11 @@ public class EnvironmentRepository {
 
     public Environment findById(long id) {
         Environment environment = cache.get(CACHE_ENV_ + id, Environment.class);
-        if(environment != null) {
+        if (environment != null) {
             return environment;
         }
         environment = environmentMapper.findById(id);
-        if(environment != null) {
+        if (environment != null) {
             cache.put(CACHE_ENV_ + id, environment);
         }
         return environment;
@@ -71,11 +71,11 @@ public class EnvironmentRepository {
 
     public Environment findByName(String name) {
         Environment environment = cache.get(CACHE_ENV_ + name, Environment.class);
-        if(environment != null) {
+        if (environment != null) {
             return environment;
         }
         environment = environmentMapper.findByName(name);
-        if(environment != null) {
+        if (environment != null) {
             cache.put(CACHE_ENV_ + name, environment);
         }
         return environment;
