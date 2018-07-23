@@ -7,13 +7,11 @@ import cd.blog.humbird.libra.mapper.EnvironmentMapper;
 import cd.blog.humbird.libra.model.vo.User;
 import cd.blog.humbird.libra.util.UserUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;

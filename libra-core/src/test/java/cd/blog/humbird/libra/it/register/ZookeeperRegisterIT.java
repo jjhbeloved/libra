@@ -3,9 +3,11 @@ package cd.blog.humbird.libra.it.register;
 import cd.blog.humbird.libra.BaseIT;
 import cd.blog.humbird.libra.register.RegisterFactory;
 import cd.blog.humbird.libra.register.ZookeeperRegister;
-import cd.blog.humbird.libra.util.EncodeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.CuratorEventType;
+import org.apache.curator.retry.RetryNTimes;
+import org.apache.zookeeper.WatchedEvent;
 import org.testng.annotations.Test;
 
 import javax.annotation.PostConstruct;
@@ -82,5 +84,37 @@ public class ZookeeperRegisterIT extends BaseIT {
         System.out.println(version);
         zookeeperRegister.unregister(key);
         assertThat(zookeeperRegister.get(key)).isNull();
+    }
+
+    @Test
+    public void watch() throws Exception {
+        CuratorFramework client = CuratorFrameworkFactory.builder()
+                .connectString("0.0.0.0:2181")
+                .retryPolicy(new RetryNTimes(1, 1000))
+                .sessionTimeoutMs(60000)
+                .connectionTimeoutMs(30000)
+                .namespace(null)
+                .build();
+        client.getCuratorListenable().addListener((cli, event) -> {
+            if (event.getType() == CuratorEventType.WATCHED) {
+                System.out.println(event.toString());
+            }
+            WatchedEvent watchedEvent = event.getWatchedEvent();
+            System.out.println(watchedEvent.getType().toString());
+        });
+        client.start();
+
+        String path = "/xxx/yyy";
+        if(client.checkExists().forPath(path) == null) {
+            client.create().creatingParentsIfNeeded().forPath(path, "hi".getBytes());
+        } else {
+            System.out.println(client.getData().forPath(path));
+            client.delete().forPath(path);
+        }
+
+//        client.close();
+        while (true) {
+            Thread.sleep(1000);
+        }
     }
 }
