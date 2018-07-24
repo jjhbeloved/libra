@@ -2,21 +2,20 @@ package cd.blog.humbird.libra.repository;
 
 import cd.blog.humbird.libra.entity.Config;
 import cd.blog.humbird.libra.entity.OpLog;
-import cd.blog.humbird.libra.entity.OpLogTypeEnum;
 import cd.blog.humbird.libra.exception.BusinessException;
 import cd.blog.humbird.libra.mapper.ConfigMapper;
+import cd.blog.humbird.libra.model.em.OpLogTypeEnum;
 import cd.blog.humbird.libra.util.UserUtil;
-import com.google.common.collect.Maps;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.ReentrantLock;
+
+import static cd.blog.humbird.libra.model.em.CacheEnum.ConfigLocalCache;
 
 /**
  * Created by david on 2018/7/20.
@@ -24,12 +23,11 @@ import java.util.concurrent.locks.ReentrantLock;
 @Repository
 public class ConfigRepository {
 
-    private static final String CACHE_CONFIG_ID_ = "cache_config_id_";
-    private static final String CACHE_CONFIG_PROJECT_ = "cache_config_p_";
-    private ConcurrentMap<String, ReentrantLock> configLocks = Maps.newConcurrentMap();
+    private static final String ID_ = "id-";
+    private static final String PRO_ID_ = "proId-";
 
-    @Resource(name = "localClusterShortCache")
-    private Cache cache;
+    @Resource(name = "localCacheManager")
+    private CacheManager cacheManager;
 
     @Autowired
     private ConfigMapper configMapper;
@@ -37,48 +35,20 @@ public class ConfigRepository {
     @Autowired
     private OpLogRepository opLogRepository;
 
+    @Cacheable(value = "configLocalCache", key = "'id-' + #id", unless = "#result == null")
     public Config findConfigById(long id) {
-        String key = CACHE_CONFIG_ID_ + id;
-        Config config = cache.get(key, Config.class);
-        if (config != null) {
-            return config;
-        }
-        config = configMapper.findConfigById(id);
-        cache.put(key, config);
-        return config;
+        return configMapper.findConfigById(id);
     }
 
+    @Cacheable(value = "configLocalCache", key = "'proId-' + #projectId", unless = "#result == null || #result.size() == 0")
     public List<Config> findConfigByProjectId(long projectId) {
-        String key = CACHE_CONFIG_PROJECT_ + projectId;
-        List<Config> configs = cache.get(key, List.class);
-        if (!CollectionUtils.isEmpty(configs)) {
-            return configs;
-        }
-        ReentrantLock reentrantLock = configLocks.get(key);
-        if (reentrantLock == null) {
-            reentrantLock = configLocks.putIfAbsent(key, new ReentrantLock());
-        }
-        try {
-            reentrantLock.lock();
-            configs = cache.get(key, List.class);
-            if (!CollectionUtils.isEmpty(configs)) {
-                return configs;
-            }
-            configs = configMapper.findConfigByProjectId(projectId);
-            cache.put(key, configs);
-        } finally {
-            reentrantLock.unlock();
-        }
-        return configs;
+        return configMapper.findConfigByProjectId(projectId);
     }
 
-    public Config findConfigByKeyAndProjectId(String key, long projectId) {
-        List<Config> configs = findConfigByProjectId(projectId);
-        return configs.stream()
-                .filter(v -> StringUtils.equals(key, v.getKey()))
-                .findFirst()
-                .orElse(null);
-    }
+//    @Cacheable(value = "configLocalCache", key = "'key-' + #key + '-proId-' + #projectId", unless = "#result == null")
+//    public Config findConfigByKeyAndProjectId(String key, long projectId) {
+//        return configMapper.findConfigByKeyAndProjectId(key, projectId);
+//    }
 
     public long createConfig(Config config) {
         Config existsConfig = configMapper.findConfigByKeyAndProjectId(config.getKey(), config.getProjectId());
@@ -101,7 +71,8 @@ public class ConfigRepository {
             opLogRepository.insert(new OpLog(OpLogTypeEnum.Config_Add.getValue(), u.getId(), content));
             return id;
         } finally {
-            cache.evict(CACHE_CONFIG_PROJECT_ + projectId);
+            Cache cache = cacheManager.getCache(ConfigLocalCache.getCode());
+//            cache.evict("proId-" + projectId);
         }
     }
 
@@ -119,8 +90,9 @@ public class ConfigRepository {
             );
             opLogRepository.insert(new OpLog(OpLogTypeEnum.Config_Delete.getValue(), u.getId(), content));
         } finally {
-            cache.evict(CACHE_CONFIG_ID_ + id);
-            cache.evict(CACHE_CONFIG_PROJECT_ + projectId);
+            Cache cache = cacheManager.getCache(ConfigLocalCache.getCode());
+            cache.evict(PRO_ID_ + projectId);
+            cache.evict(ID_ + id);
         }
     }
 }

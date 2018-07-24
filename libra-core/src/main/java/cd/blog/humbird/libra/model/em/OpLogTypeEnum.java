@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.entity;
+package cd.blog.humbird.libra.model.em;
 
 /**
  * Created by david on 2018/7/13.

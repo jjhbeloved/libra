@@ -1,22 +1,24 @@
 package cd.blog.humbird.libra.repository;
 
 import cd.blog.humbird.libra.entity.OpLog;
-import cd.blog.humbird.libra.entity.OpLogTypeEnum;
 import cd.blog.humbird.libra.entity.User;
 import cd.blog.humbird.libra.mapper.UserMapper;
+import cd.blog.humbird.libra.model.em.OpLogTypeEnum;
 import cd.blog.humbird.libra.model.vo.UserCriteria;
 import cd.blog.humbird.libra.util.UserUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 import static cd.blog.humbird.libra.helper.StatusHelper.IS_USER_USED;
+import static cd.blog.humbird.libra.model.em.CacheEnum.UserLocalCache;
 
 /**
  * Created by david on 2018/7/16.
@@ -24,7 +26,9 @@ import static cd.blog.humbird.libra.helper.StatusHelper.IS_USER_USED;
 @Repository
 public class UserRepository {
 
-    private static final String CACHE_USER_ = "cache_user_";
+    private static final String LISTS = "lists";
+    private static final String ID_ = "id-";
+    private static final String NAME_ = "name-";
 
     @Autowired
     private UserMapper userMapper;
@@ -32,8 +36,8 @@ public class UserRepository {
     @Autowired
     private OpLogRepository opLogRepository;
 
-    @Resource(name = "localClusterUserCache")
-    private Cache cache;
+    @Resource(name = "localCacheManager")
+    private CacheManager cacheManager;
 
     public PageInfo<User> getUsers(UserCriteria user, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -41,43 +45,19 @@ public class UserRepository {
         return new PageInfo<>(users);
     }
 
+    @Cacheable(value = "userLocalCache", key = LISTS, unless = " #result == null ")
     public List<User> findAll() {
-        List<User> users = cache.get(CACHE_USER_ + "list", List.class);
-        if (!CollectionUtils.isEmpty(users)) {
-            return users;
-        }
-        synchronized (this) {
-            users = cache.get(CACHE_USER_ + "list", List.class);
-            if (CollectionUtils.isEmpty(users)) {
-                users = userMapper.findAll();
-                cache.putIfAbsent(CACHE_USER_ + "list", users);
-            }
-        }
-        return users;
+        return userMapper.findAll();
     }
 
+    @Cacheable(value = "userLocalCache", key = "'id-' + #id", unless = "#result == null ")
     public User findById(long id) {
-        User user = cache.get(CACHE_USER_ + id, User.class);
-        if (user != null) {
-            return user;
-        }
-        user = userMapper.findById(id);
-        if (user != null) {
-            cache.put(CACHE_USER_ + id, user);
-        }
-        return user;
+        return userMapper.findById(id);
     }
 
+    @Cacheable(value = "userLocalCache", key = "'name-' + #name", unless = "#result == null ")
     public User findByName(String name) {
-        User user = cache.get(CACHE_USER_ + name, User.class);
-        if (user != null) {
-            return user;
-        }
-        user = userMapper.findByName(name);
-        if (user != null) {
-            cache.put(CACHE_USER_ + name, user);
-        }
-        return user;
+        return userMapper.findByName(name);
     }
 
     public long create(User user) {
@@ -93,25 +73,30 @@ public class UserRepository {
             opLogRepository.insert(new OpLog(OpLogTypeEnum.User_Add.getValue(), u.getId(), content));
             return id;
         } finally {
-            cache.evict(CACHE_USER_ + "list");
+            Cache cache = cacheManager.getCache(UserLocalCache.getCode());
+            cache.evict(LISTS);
         }
     }
 
     public void update(User user) {
+        long id = user.getId();
+        User existsUser = findById(id);
+        if (existsUser == null) {
+            return;
+        }
         try {
-            long id = user.getId();
-            User existsUser = findById(id);
-            if (existsUser != null) {
-                cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
-                user.setModifier(u.getName());
-                userMapper.update(user);
-                String content = String.format("编辑%s用户,[邮箱:%s,是否上线:%s]->[邮箱:%s,是否上线:%s]",
-                        existsUser.getLoginName(), existsUser.getEmail(), IS_USER_USED.test(existsUser), user.getLoginName(), IS_USER_USED.test(user)
-                );
-                opLogRepository.insert(new OpLog(OpLogTypeEnum.User_Edit.getValue(), u.getId(), content));
-            }
+            cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
+            user.setModifier(u.getName());
+            userMapper.update(user);
+            String content = String.format("编辑%s用户,[邮箱:%s,是否上线:%s]->[邮箱:%s,是否上线:%s]",
+                    existsUser.getLoginName(), existsUser.getEmail(), IS_USER_USED.test(existsUser), user.getLoginName(), IS_USER_USED.test(user)
+            );
+            opLogRepository.insert(new OpLog(OpLogTypeEnum.User_Edit.getValue(), u.getId(), content));
         } finally {
-            cache.evict(CACHE_USER_ + "list");
+            Cache cache = cacheManager.getCache(UserLocalCache.getCode());
+            cache.evict(LISTS);
+            cache.evict(ID_ + id);
+            cache.evict(NAME_ + existsUser.getLoginName());
         }
     }
 
@@ -128,7 +113,10 @@ public class UserRepository {
             );
             opLogRepository.insert(new OpLog(OpLogTypeEnum.User_Delete.getValue(), u.getId(), content));
         } finally {
-            cache.evict(CACHE_USER_ + "list");
+            Cache cache = cacheManager.getCache(UserLocalCache.getCode());
+            cache.evict(LISTS);
+            cache.evict(ID_ + id);
+            cache.evict(NAME_ + user.getLoginName());
         }
     }
 
