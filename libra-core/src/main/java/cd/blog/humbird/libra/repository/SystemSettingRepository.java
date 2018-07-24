@@ -3,6 +3,7 @@ package cd.blog.humbird.libra.repository;
 import cd.blog.humbird.libra.mapper.SystemSettingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -17,23 +18,15 @@ public class SystemSettingRepository {
     @Autowired
     private SystemSettingMapper systemSettingMapper;
 
-    @Resource(name = "localClusterCache")
-    private Cache cache;
+    @Resource(name = "localCacheManager")
+    private CacheManager cacheManager;
 
     public String getVal(String key) {
-        String v = cache.get(key, String.class);
-        if (!StringUtils.hasText(v)) {
-            v = systemSettingMapper.findByKey(key);
-            if (StringUtils.hasText(v)) {
-                cache.put(key, v);
-            }
-        }
-        return v;
+        return systemSettingMapper.findByKey(key);
     }
 
     public void update(String key, String value) {
         systemSettingMapper.update(key, value);
-        cache.evict(key);
     }
 
     public boolean getBool(String key) {
