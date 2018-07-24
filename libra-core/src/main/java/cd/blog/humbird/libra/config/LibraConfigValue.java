@@ -10,10 +10,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LibraConfigValue {
 
-//    @Bean(initMethod = "init")
-    @Bean
+    //    @Bean(initMethod = "init")
+    @Bean()
     public String init() {
-        System.out.println("hh");
         return "";
+    }
+
+    @Bean("xwam")
+    public String x() {
+        return "ox";
     }
 }

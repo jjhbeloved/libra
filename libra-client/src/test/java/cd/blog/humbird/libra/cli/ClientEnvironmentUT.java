@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.cli;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.util.Properties;
 
@@ -9,7 +9,7 @@ import java.util.Properties;
  * @author david
  * @since created by on 18/7/5 01:31
  */
-public class ClientEnvironmentUT {
+public class ClientEnvironmentUT extends BaseUT {
 
     @Test
     public void loadAppEnv() {

@@ -5,36 +5,13 @@ logger:
 application:
   name: libra
 
-#public
-public:
-  dubbo:
-      registry:
-            url: zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181
-            protocol: zookeeper
-      port: 20885
-      version: LATEST
-      provider:
-            version: LATEST
-            timeout: 5000
-      consumer:
-            version: LATEST
-            timeout: 5000
-
-
+#zookeeper
+zk:
+  url: zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181
 
 #database
-datasource:
-  jkshop:
-    url: jdbc:mysql://devdb-m1.db.pajkdc.com:3306/jkshop
+db:
+  libra:
+    url: jdbc:mysql://10.255.132.19:3306/test
     username: jkshop
     password: hVsXZa7fpbwv7fpd2QHDp5KkEndS9jyu6E+s827Vxn/Dy10XdeBJDACwTKvBj0+MJ3Ib7MgId+2Xm/pxWc5dSQ==
-    initialSize: 10
-    maxActive: 30
-    maxWait: 1000
-    minIdle: 10
-
-# troy
-troy:
-  agent:
-    host: troyagent.dev.pajkdc.com
-    port: 16777

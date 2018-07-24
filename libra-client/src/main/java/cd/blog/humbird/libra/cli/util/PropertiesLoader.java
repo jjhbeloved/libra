@@ -3,6 +3,9 @@ package cd.blog.humbird.libra.cli.util;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,38 +40,28 @@ public class PropertiesLoader {
     }
 
     public static Properties loadFromFileSystem(String fs) throws IOException {
-        File file = new File(fs);
-        if (!file.exists()) {
+        Resource resource = new FileSystemResource(fs);
+        if (!resource.exists()) {
             logger.debug("file {} doesn't exist in filesystem", fs);
             return null;
         }
-        URL url = file.toURI().toURL();
-        return load(url);
+        return load(resource);
     }
 
     public static Properties loadFromClassPath(String fs) throws IOException {
-        URL url = Thread.currentThread().getContextClassLoader().getResource(fs);
-        if (url == null) {
+        Resource resource = new ClassPathResource(fs);
+        if (!resource.exists()) {
             logger.debug("file {} doesn't exist in classpath", fs);
             return null;
         }
-        return load(url);
+        return load(resource);
     }
 
-    public static Properties load(URL url) throws IOException {
-        InputStream in = null;
-        try {
-            in = url.openStream();
+    public static Properties load(Resource resource) throws IOException {
+        try (InputStream in = resource.getInputStream()) {
             Properties properties = new Properties();
             properties.load(in);
             return properties;
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ignore) {
-                }
-            }
         }
     }
 }
