@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.util;
+package cd.blog.humbird.libra.common.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,7 +16,7 @@ public class IntervalLogMonitor {
 
     private static final Logger logger = LoggerFactory.getLogger(IntervalLogMonitor.class);
 
-    @Around(value = "@annotation(cd.blog.humbird.libra.util.LogMonitor)")
+    @Around(value = "@annotation(cd.blog.humbird.libra.common.aspect.LogMonitor)")
     public void doAround(ProceedingJoinPoint pjp) throws Throwable {
         final long begin = System.currentTimeMillis();
         try {

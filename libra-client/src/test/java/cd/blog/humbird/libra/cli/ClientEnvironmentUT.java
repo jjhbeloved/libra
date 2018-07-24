@@ -9,7 +9,7 @@ import java.util.Properties;
  * @author david
  * @since created by on 18/7/5 01:31
  */
-public class ClientEnvironmentUT {
+public class ClientEnvironmentUT extends BaseUT {
 
     @Test
     public void loadAppEnv() {

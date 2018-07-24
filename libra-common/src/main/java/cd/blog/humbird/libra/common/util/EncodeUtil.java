@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.util;
+package cd.blog.humbird.libra.common.util;
 
 import java.io.UnsupportedEncodingException;
 

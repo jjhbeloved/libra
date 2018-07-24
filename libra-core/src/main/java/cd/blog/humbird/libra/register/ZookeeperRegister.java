@@ -1,11 +1,12 @@
 package cd.blog.humbird.libra.register;
 
+import cd.blog.humbird.libra.common.Constants;
+import cd.blog.humbird.libra.common.util.EncodeUtil;
+import cd.blog.humbird.libra.common.util.ZKUtil;
+import cd.blog.humbird.libra.common.zk.ZKCli;
 import cd.blog.humbird.libra.exception.ZookeeperRegisterException;
-import cd.blog.humbird.libra.mapper.ZKCli;
-import cd.blog.humbird.libra.util.EncodeUtil;
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.retry.RetryNTimes;
+import org.apache.curator.framework.imps.CuratorFrameworkState;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +23,11 @@ public class ZookeeperRegister implements Register {
 
     private String servers;
     private String namespace;
-    private String parentPath = "/HUMBIRD/LIBRA";
+    private String parentPath = Constants.CONFIG_PATH;
     private String contextNode = "CONTEXTVALUE";
     private String timestampNode = "TIMESTAMP";
 
+    private CuratorFramework cli;
     private ZKCli zkCli;
 
     public ZookeeperRegister(String servers) {
@@ -35,12 +37,22 @@ public class ZookeeperRegister implements Register {
     public ZookeeperRegister(String servers, String namespace) {
         this.servers = servers;
         this.namespace = namespace;
-        zkCli = new ZKCli(servers, namespace);
+        this.cli = ZKUtil.createCuratorCli(servers, namespace);
+        this.zkCli = new ZKCli(this.cli);
     }
 
     @Override
     public void init() throws Exception {
-        zkCli.start();
+        this.cli.getConnectionStateListenable().addListener((cli, newState) -> {
+            String conn = cli.getZookeeperClient().getCurrentConnectionString();
+            LOGGER.info("libra zookeeper {} state: {}", conn, newState);
+        });
+        this.cli.start();
+        try {
+            this.cli.getZookeeperClient().blockUntilConnectedOrTimedOut();
+        } catch (Exception e) {
+            LOGGER.error("failed to connect to zookeeper: " + servers, e);
+        }
     }
 
     @Override
@@ -136,8 +148,9 @@ public class ZookeeperRegister implements Register {
     public String getRemoteDataVersion(String key) {
         String path = this.parentPath + "/" + key;
         try {
-            Stat stat = zkCli.getStat(path);
-            return String.format("%s-%s", stat.getMtime(), stat.getVersion());
+            Stat stat = new Stat();
+            zkCli.get(path, stat);
+            return String.format(Constants.VERSION_FORMAT, stat.getMtime(), stat.getVersion());
         } catch (Exception e) {
             LOGGER.warn("get data version from zookeeper fail,error:{}", e);
         }
@@ -161,7 +174,12 @@ public class ZookeeperRegister implements Register {
 
     @Override
     public void destroy() {
-        zkCli.close();
+        if (this.cli == null) {
+            return;
+        }
+        if (this.cli.getState() == CuratorFrameworkState.STARTED) {
+            this.cli.close();
+        }
     }
 
     private String getPath(String key, String group) {
@@ -172,24 +190,16 @@ public class ZookeeperRegister implements Register {
         }
     }
 
-    private void set(String path, long value) throws Exception {
-        this.set(path, EncodeUtil.long2byte(value));
+    private boolean set(String path, long value) throws Exception {
+        return this.set(path, EncodeUtil.long2byte(value));
     }
 
-    private void set(String path, String value) throws Exception {
-        if (value == null) {
-            LOGGER.warn("Set null config value to zk[{}] with path[{}].", servers, path);
-        } else {
-            this.set(path, value.getBytes(EncodeUtil.CHARSET));
-        }
+    private boolean set(String path, String value) throws Exception {
+        return this.set(path, value.getBytes());
     }
 
-    private void set(String path, byte[] value) throws Exception {
-        if (zkCli.exists(path)) {
-            zkCli.set(path, value);
-        } else {
-            zkCli.create(path, value);
-        }
+    private boolean set(String path, byte[] value) throws Exception {
+        return zkCli.createOrSet(path, value);
     }
 
 }

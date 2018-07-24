@@ -33,6 +33,8 @@ Libra-配置中心
    但是中间还是存在时延，假使对于Zookeeper瞬时触发几个事件，
    则该监听器并不能保证监听到所有状态的改变，至于可以监听到多少取决于服务器的处理速度
    ```
+   配置中心使用 listener.addListener添加针对 getData和existsData的监听(changed/created/deleted)事件, 
+   获取数据并且缓存在本地
 
 ## fixed
 1. 使用 springCache解决缓存穿透问题, 使用 springCache composite 合并多种缓存

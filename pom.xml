@@ -15,6 +15,7 @@
         <common.lang3.version>3.3.2</common.lang3.version>
         <common.collection4.version>4.1</common.collection4.version>
         <common.codec.version>1.11</common.codec.version>
+        <fastjson.version>1.2.47</fastjson.version>
         <guava.version>19.0</guava.version>
         <caffeine.version>2.6.2</caffeine.version>
         <curator.version>2.12.0</curator.version>
@@ -38,6 +39,7 @@
     <modules>
         <module>libra-client</module>
         <module>libra-core</module>
+        <module>libra-common</module>
     </modules>
 
     <dependencyManagement>
@@ -51,6 +53,11 @@
             <dependency>
                 <groupId>cd.blog.humbird</groupId>
                 <artifactId>libra-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cd.blog.humbird</groupId>
+                <artifactId>libra-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- spring -->
@@ -112,6 +119,11 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${common.codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.curator</groupId>
