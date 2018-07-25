@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.cli.util;
+package cd.blog.humbird.libra.common.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -7,19 +7,17 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 
 /**
  * @author david
  * @since created by on 18/7/5 01:50
  */
-public class PropertiesLoader {
+public class PropertiesUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(PropertiesLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesUtil.class);
 
     private static final String SCHEMA_CLASSPATH = "classpath:";
 
@@ -34,7 +32,7 @@ public class PropertiesLoader {
                 return loadFromFileSystem(fs);
             }
         } catch (Exception e) {
-            logger.warn("exception:", e);
+            LOGGER.warn("exception:", e);
         }
         return null;
     }
@@ -42,7 +40,7 @@ public class PropertiesLoader {
     public static Properties loadFromFileSystem(String fs) throws IOException {
         Resource resource = new FileSystemResource(fs);
         if (!resource.exists()) {
-            logger.debug("file {} doesn't exist in filesystem", fs);
+            LOGGER.info("file {} doesn't exist in filesystem", fs);
             return null;
         }
         return load(resource);
@@ -51,7 +49,7 @@ public class PropertiesLoader {
     public static Properties loadFromClassPath(String fs) throws IOException {
         Resource resource = new ClassPathResource(fs);
         if (!resource.exists()) {
-            logger.debug("file {} doesn't exist in classpath", fs);
+            LOGGER.info("file {} doesn't exist in classpath", fs);
             return null;
         }
         return load(resource);

@@ -1,9 +1,9 @@
 package cd.blog.humbird.libra.cli.config.zk;
 
 import cd.blog.humbird.libra.cli.BaseUT;
+import cd.blog.humbird.libra.common.util.JsonUtil;
 import cd.blog.humbird.libra.common.util.ZKUtil;
 import cd.blog.humbird.libra.common.zk.ZKCli;
-import com.alibaba.fastjson.JSON;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEventType;
 import org.apache.zookeeper.WatchedEvent;
@@ -25,7 +25,7 @@ public class ZKConfigLoaderUT extends BaseUT {
                 System.out.println(event.toString());
             }
             WatchedEvent watchedEvent = event.getWatchedEvent();
-            System.out.println(JSON.toJSONString(watchedEvent));
+            System.out.println(JsonUtil.toJson(watchedEvent));
         });
         client.start();
         while (true) {
@@ -43,7 +43,7 @@ public class ZKConfigLoaderUT extends BaseUT {
             }
             WatchedEvent watchedEvent = event.getWatchedEvent();
             if (watchedEvent.getPath() != null) {
-                System.out.println(JSON.toJSONString(watchedEvent));
+                System.out.println(JsonUtil.toJson(watchedEvent));
                 if (watchedEvent.getType() == Watcher.Event.EventType.NodeCreated) {
                     System.out.println(zkCli.getWatched(watchedEvent.getPath()));
                 } else {

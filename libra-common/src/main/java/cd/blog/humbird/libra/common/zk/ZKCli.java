@@ -2,6 +2,7 @@ package cd.blog.humbird.libra.common.zk;
 
 import cd.blog.humbird.libra.common.Constants;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class ZKCli {
         try {
             return client.checkExists().forPath(path) != null;
         } catch (Exception e) {
-            LOGGER.warn("failed check exists:{},exception:{}", path, e.getMessage());
+            LOGGER.error("failed check exists:{},exception:{}", path, e.getMessage());
         }
         return false;
     }
@@ -37,7 +38,7 @@ public class ZKCli {
         try {
             return client.checkExists().watched().forPath(path) != null;
         } catch (Exception e) {
-            LOGGER.warn("failed check exists:{} watched,exception:{}", path, e.getMessage());
+            LOGGER.error("failed check exists:{} watched,exception:{}", path, e.getMessage());
         }
         return false;
     }
@@ -46,7 +47,7 @@ public class ZKCli {
         try {
             return new String(client.getData().forPath(path), Constants.CHARSET);
         } catch (Exception e) {
-            LOGGER.warn("failed get path:{},exception:{}", path, e.getMessage());
+            LOGGER.error("failed get path:{},exception:{}", path, e.getMessage());
         }
         return null;
     }
@@ -55,7 +56,7 @@ public class ZKCli {
         try {
             return new String(client.getData().storingStatIn(stat).forPath(path), Constants.CHARSET);
         } catch (Exception e) {
-            LOGGER.warn("failed get path:{} stat:{},exception:{}", path, stat, e.getMessage());
+            LOGGER.error("failed get path:{} stat:{},exception:{}", path, stat, e.getMessage());
         }
         return null;
     }
@@ -64,7 +65,7 @@ public class ZKCli {
         try {
             return new String(client.getData().watched().forPath(path), Constants.CHARSET);
         } catch (Exception e) {
-            LOGGER.warn("failed to get path:{} watched,exception:{}", path, e.getMessage());
+            LOGGER.error("failed to get path:{} watched,exception:{}", path, e.getMessage());
         }
         return null;
     }
@@ -82,27 +83,35 @@ public class ZKCli {
         try {
             return client.getChildren().forPath(path);
         } catch (Exception e) {
-            LOGGER.warn("failed to get children path:{},exception:{}", path, e.getMessage());
+            LOGGER.error("failed to get children path:{},exception:{}", path, e.getMessage());
         }
         return Collections.emptyList();
     }
 
 
     public boolean create(String path, String data) {
+        return create(path, CreateMode.PERSISTENT, data);
+    }
+
+    public boolean create(String path, CreateMode mode, String data) {
         try {
-            return create(path, data.getBytes(Constants.CHARSET));
+            return create(path, mode, data.getBytes(Constants.CHARSET));
         } catch (UnsupportedEncodingException e) {
-            LOGGER.warn("failed to create path:{},data:{},exception:{}", path, data, e.getMessage());
+            LOGGER.error("failed to create path:{},data:{},exception:{}", path, data, e.getMessage());
         }
         return false;
     }
 
     public boolean create(String path, byte[] data) {
+        return create(path, CreateMode.PERSISTENT, data);
+    }
+
+    public boolean create(String path, CreateMode mode, byte[] data) {
         try {
-            client.create().creatingParentsIfNeeded().forPath(path, data);
+            client.create().creatingParentsIfNeeded().withMode(mode).forPath(path, data);
             return true;
         } catch (Exception e) {
-            LOGGER.warn("failed to create path:{},data:{},exception:{}", path, data, e);
+            LOGGER.error("failed to create path:{},data:{},exception:{}", path, data, e);
         }
         return false;
     }
@@ -111,7 +120,7 @@ public class ZKCli {
         try {
             return set(path, data.getBytes(Constants.CHARSET));
         } catch (UnsupportedEncodingException e) {
-            LOGGER.warn("failed to set path:{},data:{},exception:{}", path, data, e.getMessage());
+            LOGGER.error("failed to set path:{},data:{},exception:{}", path, data, e.getMessage());
         }
         return false;
     }
@@ -127,19 +136,27 @@ public class ZKCli {
     }
 
     public boolean createOrSet(String path, String data) {
+        return createOrSet(path, CreateMode.PERSISTENT, data);
+    }
+
+    public boolean createOrSet(String path, CreateMode mode, String data) {
         try {
-            return createOrSet(path, data.getBytes(Constants.CHARSET));
+            return createOrSet(path, mode, data.getBytes(Constants.CHARSET));
         } catch (UnsupportedEncodingException e) {
-            LOGGER.warn("failed to createOrSet path:{},data:{},exception:{}", path, data, e.getMessage());
+            LOGGER.error("failed to createOrSet path:{},data:{},exception:{}", path, data, e.getMessage());
         }
         return false;
     }
 
     public boolean createOrSet(String path, byte[] data) {
+        return createOrSet(path, CreateMode.PERSISTENT, data);
+    }
+
+    public boolean createOrSet(String path, CreateMode mode, byte[] data) {
         if (exists(path)) {
             return set(path, data);
         } else {
-            return create(path, data);
+            return create(path, mode, data);
         }
     }
 
@@ -147,7 +164,7 @@ public class ZKCli {
         try {
             client.delete().deletingChildrenIfNeeded().forPath(path);
         } catch (Exception e) {
-            LOGGER.warn("failed to delete path:{},exception:{}", path, e.getMessage());
+            LOGGER.error("failed to delete path:{},exception:{}", path, e.getMessage());
         }
     }
 }

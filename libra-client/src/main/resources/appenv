@@ -1,0 +1,4 @@
+app_name=libra
+app_version=1.0.0-SNAPSHOT
+deploy_env=dev
+zk_server=localhost:2181

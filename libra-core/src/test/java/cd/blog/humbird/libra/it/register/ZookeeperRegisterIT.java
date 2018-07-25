@@ -3,12 +3,6 @@ package cd.blog.humbird.libra.it.register;
 import cd.blog.humbird.libra.BaseIT;
 import cd.blog.humbird.libra.register.RegisterFactory;
 import cd.blog.humbird.libra.register.ZookeeperRegister;
-import com.alibaba.fastjson.JSON;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.api.CuratorEventType;
-import org.apache.curator.retry.RetryNTimes;
-import org.apache.zookeeper.WatchedEvent;
 import org.testng.annotations.Test;
 
 import javax.annotation.PostConstruct;

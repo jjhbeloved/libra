@@ -1,6 +1,7 @@
 package cd.blog.humbird.libra.cli.config.zk;
 
 import cd.blog.humbird.libra.common.util.ZKUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEvent;
 import org.apache.curator.framework.api.CuratorEventType;
@@ -51,18 +52,33 @@ public class ZKListener implements CuratorListener {
         EventType type = watchedEvent.getType();
         LOGGER.info("zk event received, path:{}, event:{}", path, type);
         if (type == EventType.NodeCreated || type == EventType.NodeDataChanged) {
-
+            configChanged(key, type);
         } else if (type == EventType.NodeDeleted) {
             configDeleted(key);
         }
     }
 
-    private void configChanged(String key) {
-        ZKValue zkValue = configLoader.getZKValue(key);
-        this.configLoader.changed(key, zkValue);
+    private void configChanged(String key, EventType eventType) {
+        ZKValue curVal = configLoader.getZKValue(key);
+        if (acceptChange(key, eventType, curVal)) {
+            this.configLoader.changed(key, curVal);
+        } else {
+            LOGGER.info("ignored config event,key:{},value:{}", key, curVal);
+        }
     }
 
     private void configDeleted(String key) {
         this.configLoader.deleted(key);
+    }
+
+    private boolean acceptChange(String key, EventType eventType, ZKValue curVal) {
+        if (curVal == null || (eventType == EventType.NodeCreated && StringUtils.isBlank(curVal.getValue()))) {
+            return false;
+        }
+        ZKValue exists = configLoader.getKeyValues().get(key);
+        if (exists == null) {
+            return false;
+        }
+        return curVal.getVersion().compareTo(exists.getVersion()) > 0;
     }
 }

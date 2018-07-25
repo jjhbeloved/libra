@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.cli;
 
-import cd.blog.humbird.libra.cli.util.PropertiesLoader;
 import cd.blog.humbird.libra.common.Constants;
+import cd.blog.humbird.libra.common.util.PropertiesUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.util.Properties;
  */
 public class ClientEnvironment {
 
-    private static final Logger logger = LoggerFactory.getLogger(ClientEnvironment.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientEnvironment.class);
 
     private static Properties props = null;
     private static String appName = null;
@@ -36,7 +36,7 @@ public class ClientEnvironment {
      * 加载 libra 内部缓存刷新变量
      */
     public static void loadConfigFile() {
-        Properties props = PropertiesLoader.load("classpath:META-INF/libra.properties");
+        Properties props = PropertiesUtil.load("classpath:libra.properties");
         if (props != null) {
             String cache = props.getProperty("readCache");
             String interval = props.getProperty("syncInterval");
@@ -73,12 +73,12 @@ public class ClientEnvironment {
         }
         // load from CLASSPATH
         if (properties == null) {
-            properties = PropertiesLoader.load("classpath:appenv");
+            properties = PropertiesUtil.load("classpath:appenv");
         }
         // {{预留扩展}}
         // check and using default values
         checkAppEnv(properties);
-        logger.info("loaded appenv, env {} zkserver {}", deployenv, zkserver);
+        LOGGER.info("loaded appenv, env {} zkserver {}", deployenv, zkserver);
         return properties;
     }
 
@@ -107,17 +107,17 @@ public class ClientEnvironment {
         int idx = path.indexOf(alias);
         if (idx != -1) {
             String fs = path.substring(0, idx + (alias.length() + 1)).concat("appenv");
-            return PropertiesLoader.load(fs);
+            return PropertiesUtil.load(fs);
         }
         return null;
     }
 
     public static String getAppName() {
-        return Optional.ofNullable(appName).orElse("defaultAppName");
+        return Optional.ofNullable(appName).orElse("libra");
     }
 
     public static String getAppVersion() {
-        return Optional.ofNullable(appVersion).orElse("defaultAppVersion");
+        return Optional.ofNullable(appVersion).orElse("1.0.0-SNAPSHOT");
     }
 
     public static String getZkserver() {

@@ -53,6 +53,10 @@ public class ZKConfigLoader extends AbstractConfigLoader {
         }));
     }
 
+    public ConcurrentMap<String, ZKValue> getKeyValues() {
+        return keyValues;
+    }
+
     public void changed(String key, ZKValue value) {
         keyValues.put(key, value);
         LOGGER.info("++++++++++++ config deleted, key:{},val:{}", key, value);
