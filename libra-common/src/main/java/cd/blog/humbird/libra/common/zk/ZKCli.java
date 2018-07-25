@@ -28,7 +28,7 @@ public class ZKCli {
         try {
             return client.checkExists().forPath(path) != null;
         } catch (Exception e) {
-            LOGGER.warn("failed check exists:{},exception. msg:{}", path, e.getMessage());
+            LOGGER.warn("failed check exists:{},exception:{}", path, e.getMessage());
         }
         return false;
     }
@@ -37,7 +37,7 @@ public class ZKCli {
         try {
             return client.checkExists().watched().forPath(path) != null;
         } catch (Exception e) {
-            LOGGER.warn("failed check exists:{} watched,exception. msg:{}", path, e.getMessage());
+            LOGGER.warn("failed check exists:{} watched,exception:{}", path, e.getMessage());
         }
         return false;
     }
@@ -46,7 +46,7 @@ public class ZKCli {
         try {
             return new String(client.getData().forPath(path), Constants.CHARSET);
         } catch (Exception e) {
-            LOGGER.warn("failed get path:{},exception:", path, e);
+            LOGGER.warn("failed get path:{},exception:{}", path, e.getMessage());
         }
         return null;
     }
@@ -55,7 +55,7 @@ public class ZKCli {
         try {
             return new String(client.getData().storingStatIn(stat).forPath(path), Constants.CHARSET);
         } catch (Exception e) {
-            LOGGER.warn("failed get path:{} stat:{},exception:", path, stat, e);
+            LOGGER.warn("failed get path:{} stat:{},exception:{}", path, stat, e.getMessage());
         }
         return null;
     }
@@ -64,7 +64,7 @@ public class ZKCli {
         try {
             return new String(client.getData().watched().forPath(path), Constants.CHARSET);
         } catch (Exception e) {
-            LOGGER.warn("failed to get path:{} watched,exception:", path, e);
+            LOGGER.warn("failed to get path:{} watched,exception:{}", path, e.getMessage());
         }
         return null;
     }
@@ -73,7 +73,7 @@ public class ZKCli {
         try {
             return new String(client.getData().storingStatIn(stat).watched().forPath(path), Constants.CHARSET);
         } catch (Exception e) {
-            LOGGER.error("failed to get path:{} stat:{},exception:", path, stat, e);
+            LOGGER.error("failed to get path:{} stat:{},exception:{}", path, stat, e.getMessage());
         }
         return null;
     }
@@ -82,7 +82,7 @@ public class ZKCli {
         try {
             return client.getChildren().forPath(path);
         } catch (Exception e) {
-            LOGGER.warn("failed to get children path:{},exception:", path, e);
+            LOGGER.warn("failed to get children path:{},exception:{}", path, e.getMessage());
         }
         return Collections.emptyList();
     }
@@ -92,7 +92,7 @@ public class ZKCli {
         try {
             return create(path, data.getBytes(Constants.CHARSET));
         } catch (UnsupportedEncodingException e) {
-            LOGGER.warn("failed to create path:{},data:{},exception:", path, data, e.getMessage());
+            LOGGER.warn("failed to create path:{},data:{},exception:{}", path, data, e.getMessage());
         }
         return false;
     }
@@ -102,7 +102,7 @@ public class ZKCli {
             client.create().creatingParentsIfNeeded().forPath(path, data);
             return true;
         } catch (Exception e) {
-            LOGGER.warn("failed to create path:{},data:{},exception:", path, data, e);
+            LOGGER.warn("failed to create path:{},data:{},exception:{}", path, data, e);
         }
         return false;
     }
@@ -111,7 +111,7 @@ public class ZKCli {
         try {
             return set(path, data.getBytes(Constants.CHARSET));
         } catch (UnsupportedEncodingException e) {
-            LOGGER.warn("failed to set path:{},data:{},exception:", path, data, e.getMessage());
+            LOGGER.warn("failed to set path:{},data:{},exception:{}", path, data, e.getMessage());
         }
         return false;
     }
@@ -121,7 +121,7 @@ public class ZKCli {
             client.setData().forPath(path, data);
             return true;
         } catch (Exception e) {
-            LOGGER.error("failed to set path:{},data{},exception:", path, data, e);
+            LOGGER.error("failed to set path:{},data{},exception:{}", path, data, e.getMessage());
         }
         return false;
     }
@@ -130,7 +130,7 @@ public class ZKCli {
         try {
             return createOrSet(path, data.getBytes(Constants.CHARSET));
         } catch (UnsupportedEncodingException e) {
-            LOGGER.warn("failed to createOrSet path:{},data:{},exception:", path, data, e.getMessage());
+            LOGGER.warn("failed to createOrSet path:{},data:{},exception:{}", path, data, e.getMessage());
         }
         return false;
     }
@@ -147,7 +147,7 @@ public class ZKCli {
         try {
             client.delete().deletingChildrenIfNeeded().forPath(path);
         } catch (Exception e) {
-            LOGGER.warn("failed to delete path:{},exception:", path, e);
+            LOGGER.warn("failed to delete path:{},exception:{}", path, e.getMessage());
         }
     }
 }

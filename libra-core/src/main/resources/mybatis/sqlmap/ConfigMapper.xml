@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cd.blog.humbird.libra.mapper.ConfigMapper">
+
+    <resultMap id="ConfigResult" type="cd.blog.humbird.libra.entity.Config">
+        <id column="id" property="id"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="modifier" property="modifier"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="version" property="version"/>
+        <result column="key" property="key"/>
+        <result column="desc" property="desc"/>
+        <result column="projectId" property="projectId"/>
+        <result column="private" property="pri"/>
+        <result column="creatorId" property="creatorId"/>
+    </resultMap>
+
+    <sql id="getConfigCondition">
+        <where>
+            <if test="criteria.key != null">
+                and c.`key` LIKE CONCAT('%', #{criteria.key}, '%')
+            </if>
+            <if test="criteria.projectId != null">
+                and c.projectId = #{criteria.projectId}
+            </if>
+            <if test="criteria.creatorId != null">
+                and c.creatorId = #{criteria.creatorId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findConfigById" resultMap="ConfigResult">
+        SELECT *
+        FROM config
+        WHERE id = #{id}
+        ORDER BY id
+    </select>
+
+    <select id="findConfigByKeyAndProjectId" resultMap="ConfigResult">
+        SELECT *
+        FROM config
+        WHERE 1=1
+        <if test="key != null">
+            AND `key` LIKE CONCAT('%', #{key}, '%')
+        </if>
+        <if test="projectId > 0">
+            AND projectId = #{projectId}
+        </if>
+        ORDER BY id
+    </select>
+
+    <select id="findConfigByKey" resultMap="ConfigResult">
+        SELECT *
+        FROM config
+        WHERE `key` = #{key}
+        ORDER BY id
+    </select>
+
+    <select id="findConfigByKeyParttern" resultMap="ConfigResult">
+        SELECT *
+        FROM config
+        WHERE `key` LIKE CONCAT('%', #{key}, '%')
+        ORDER BY id
+    </select>
+
+    <select id="findConfigByCreatorId" resultMap="ConfigResult">
+        SELECT *
+        FROM config
+        WHERE creatorId = #{creatorId}
+        ORDER BY id
+    </select>
+
+    <select id="findConfigByProjectId" resultMap="ConfigResult">
+        SELECT *
+        FROM config
+        WHERE projectId = #{projectId}
+        ORDER BY id
+    </select>
+
+    <select id="findConfigs" resultMap="ConfigResult">
+        SELECT *
+        FROM config c
+        <include refid="getConfigCondition"/>
+    </select>
+
+    <insert id="insertConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into config(gmt_created, gmt_modified, creator, modifier, version,
+                `key`, `desc`, `type`, projectId, private, creatorId)
+        values(NOW(), NOW(), #{creator}, #{modifier}, #{version},
+                #{key}, #{desc}, #{type}, #{projectId}, #{pri}, #{creatorId})
+    </insert>
+
+    <update id="updateConfig">
+        update config
+        set `desc`       = #{desc},
+            `type`        = #{type},
+            private      = #{pri},
+            modifier     = #{modifier},
+            gmt_modified = NOW()
+        where id = #{id} and version = #{version}
+    </update>
+
+    <delete id="deleteConfig">
+        delete from config
+        where id = #{id}
+    </delete>
+
+    <resultMap id="ConfigInstanceResult" type="cd.blog.humbird.libra.entity.ConfigInstance">
+        <id column="id" property="id"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="modifier" property="modifier"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="version" property="version"/>
+        <result column="configId" property="configId"/>
+        <result column="envId" property="envId"/>
+        <result column="desc" property="desc"/>
+        <result column="value" property="value"/>
+        <result column="context" property="context"/>
+        <result column="contextmd5" property="contextmd5"/>
+        <result column="creatorId" property="creatorId"/>
+    </resultMap>
+
+    <sql id="getConfigInstanceCondition">
+        <where>
+            <if test="criteria.configId != null">
+                and c.configId = #{criteria.configId}
+            </if>
+            <if test="criteria.envId != null">
+                and c.envId = #{criteria.envId}
+            </if>
+            <if test="criteria.creatorId != null">
+                and c.creatorId = #{criteria.creatorId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findConfigInstanceById" resultMap="ConfigInstanceResult">
+        SELECT *
+        FROM config_instance
+        WHERE id = #{id}
+        ORDER BY id
+    </select>
+
+    <select id="findConfigInstanceByCreatorId" resultMap="ConfigInstanceResult">
+        SELECT *
+        FROM config_instance
+        WHERE creatorId = #{creatorId}
+        ORDER BY id
+    </select>
+
+    <select id="findConfigInstanceByConfigIdAndEnvId" resultMap="ConfigInstanceResult">
+        SELECT *
+        FROM config_instance
+        WHERE 1=1
+        <if test="configId > 0">
+            AND configId = #{configId}
+        </if>
+        <if test="envId > 0">
+            AND envId = #{envId}
+        </if>
+        ORDER BY id
+    </select>
+
+    <select id="findConfigInstances" resultMap="ConfigInstanceResult">
+        SELECT *
+        FROM config_instance c
+        <include refid="getConfigInstanceCondition"/>
+    </select>
+
+    <insert id="insertConfigInstance" useGeneratedKeys="true" keyProperty="id">
+        insert into config_instance(gmt_created, gmt_modified, creator, modifier, version,
+                `configId`, `envId`, `desc`, `value`, context, contextmd5, creatorId)
+        values(NOW(), NOW(), #{creator}, #{modifier}, #{version},
+                #{configId}, #{envId}, #{desc}, #{value}, #{context}, #{contextmd5}, #{creatorId})
+    </insert>
+
+    <update id="updateConfigInstance">
+        update config_instance
+        set `desc`       = #{desc},
+            `value`        = #{value},
+            `context`      = #{context},
+            contextmd5      = #{contextmd5},
+            modifier     = #{modifier},
+            gmt_modified = NOW()
+        where id = #{id} and version = #{version}
+    </update>
+
+    <delete id="deleteConfigInstance">
+        delete from config_instance
+        where id = #{id}
+    </delete>
+</mapper>
