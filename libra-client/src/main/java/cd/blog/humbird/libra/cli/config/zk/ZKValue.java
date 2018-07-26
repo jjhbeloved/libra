@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.cli.config.zk;
 
-import cd.blog.humbird.libra.cli.config.ConfigValue;
+import cd.blog.humbird.libra.cli.model.ConfigValue;
 
 /**
  * @author david

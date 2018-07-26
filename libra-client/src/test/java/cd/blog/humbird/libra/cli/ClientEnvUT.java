@@ -9,13 +9,13 @@ import java.util.Properties;
  * @author david
  * @since created by on 18/7/5 01:31
  */
-public class ClientEnvironmentUT extends BaseUT {
+public class ClientEnvUT extends BaseUT {
 
     @Test
     public void loadAppEnv() {
-        Properties properties = ClientEnvironment.loadAppEnv();
+        Properties properties = ClientEnv.loadAppEnv();
         Assert.assertTrue(properties.size() > 0);
-        Assert.assertTrue(ClientEnvironment.isReadCache());
-        Assert.assertEquals(ClientEnvironment.getSyncInterval(), 1800000);
+        Assert.assertTrue(ClientEnv.isReadCache());
+        Assert.assertEquals(ClientEnv.getSyncInterval(), 1800000);
     }
 }

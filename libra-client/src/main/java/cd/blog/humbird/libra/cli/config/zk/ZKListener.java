@@ -1,7 +1,6 @@
 package cd.blog.humbird.libra.cli.config.zk;
 
 import cd.blog.humbird.libra.common.util.ZKUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEvent;
 import org.apache.curator.framework.api.CuratorEventType;
@@ -24,7 +23,7 @@ public class ZKListener implements CuratorListener {
 
     private ZKConfigLoader configLoader;
 
-    public ZKListener(ZKConfigLoader configLoader) {
+    ZKListener(ZKConfigLoader configLoader) {
         this.configLoader = configLoader;
     }
 
@@ -52,33 +51,23 @@ public class ZKListener implements CuratorListener {
         EventType type = watchedEvent.getType();
         LOGGER.info("zk event received, path:{}, event:{}", path, type);
         if (type == EventType.NodeCreated || type == EventType.NodeDataChanged) {
-            configChanged(key, type);
+            configChanged(key);
         } else if (type == EventType.NodeDeleted) {
             configDeleted(key);
         }
     }
 
-    private void configChanged(String key, EventType eventType) {
-        ZKValue curVal = configLoader.getZKValue(key);
-        if (acceptChange(key, eventType, curVal)) {
-            this.configLoader.changed(key, curVal);
-        } else {
-            LOGGER.info("ignored config event,key:{},value:{}", key, curVal);
-        }
+    /**
+     * 增加对key关联的path的watched
+     *
+     * @param key
+     */
+    private void configChanged(String key) {
+        configLoader.getZKValue(key);
     }
 
     private void configDeleted(String key) {
-        this.configLoader.deleted(key);
+
     }
 
-    private boolean acceptChange(String key, EventType eventType, ZKValue curVal) {
-        if (curVal == null || (eventType == EventType.NodeCreated && StringUtils.isBlank(curVal.getValue()))) {
-            return false;
-        }
-        ZKValue exists = configLoader.getKeyValues().get(key);
-        if (exists == null) {
-            return false;
-        }
-        return curVal.getVersion().compareTo(exists.getVersion()) > 0;
-    }
 }

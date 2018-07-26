@@ -1,22 +1,24 @@
 package cd.blog.humbird.libra.cli.model;
 
-import cd.blog.humbird.libra.cli.ClientEnvironment;
+import cd.blog.humbird.libra.cli.ClientEnv;
 import cd.blog.humbird.libra.common.util.SystemUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
 
 /**
  * @author david
  * @since created by on 18/7/25 23:25
  */
-public class ClientStatus {
+public class ClientStatus implements Serializable {
 
     private String host = SystemUtil.getIPv4Host();
     private String pid = SystemUtil.getPID();
-    private String appName = ClientEnvironment.getAppName();
-    private String appVer = ClientEnvironment.getAppVersion();
-    private String appEnv = ClientEnvironment.getEnv().toUpperCase();
-    private long startTime = ClientEnvironment.getStartTime();
+    private String appName = ClientEnv.getAppName();
+    private String appVer = ClientEnv.getAppVersion();
+    private String appEnv = ClientEnv.getEnv().toUpperCase();
+    private long startTime = ClientEnv.getStartTime();
     private long msgTime = System.currentTimeMillis();
     private String tag;
     private String msg;

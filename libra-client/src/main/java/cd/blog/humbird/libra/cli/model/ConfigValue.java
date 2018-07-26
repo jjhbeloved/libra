@@ -1,15 +1,18 @@
-package cd.blog.humbird.libra.cli.config;
+package cd.blog.humbird.libra.cli.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
+
 /**
- * @author david
- * @since created by on 18/7/25 01:42
+ * Created by david on 2018/7/26.
  */
-public abstract class ConfigValue {
+public class ConfigValue implements Serializable {
+
     private String key;
-    private String value;
+
+    private String val;
 
     public String getKey() {
         return key;
@@ -19,17 +22,16 @@ public abstract class ConfigValue {
         this.key = key;
     }
 
-    public String getValue() {
-        return value;
+    public String getVal() {
+        return val;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setVal(String val) {
+        this.val = val;
     }
 
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
-
 }

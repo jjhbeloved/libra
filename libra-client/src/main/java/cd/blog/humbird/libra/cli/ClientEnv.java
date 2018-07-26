@@ -9,14 +9,16 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author david
  * @since created by on 18/7/5 01:17
  */
-public class ClientEnvironment {
+public class ClientEnv {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientEnvironment.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientEnv.class);
 
     private static Properties props = null;
     private static String appName = null;
@@ -64,7 +66,7 @@ public class ClientEnvironment {
      */
     public static Properties loadAppEnv() {
         Properties properties = null;
-        URL url = ClientEnvironment.class.getProtectionDomain().getCodeSource().getLocation();
+        URL url = ClientEnv.class.getProtectionDomain().getCodeSource().getLocation();
 //        String path = url.getPath();
         String path = "/install_apps/intelliJ_bak/os/libra/libra-client/src/test/resources/WEB-INF/";
         properties = getProWithString(path, "WEB-INF");
@@ -75,7 +77,18 @@ public class ClientEnvironment {
         if (properties == null) {
             properties = PropertiesUtil.load("classpath:appenv");
         }
-        // {{预留扩展}}
+        // {{预留扩展}} 这里读基础环境的appenv, 在基础模块会自动生成对应项目的appenv
+        // load from /home/admin/${projectName}/appenv
+        if (props == null) {
+            Pattern pattern = Pattern.compile("/home/admin/(.*?)/.*");
+            Matcher matcher = pattern.matcher(path);
+            if (matcher.find()) {
+                String projectName = matcher.group(1);
+                String p = "/home/admin/" + projectName + "/appenv";
+                LOGGER.info("load appenv from {}", p);
+                props = PropertiesUtil.load(p);
+            }
+        }
         // check and using default values
         checkAppEnv(properties);
         LOGGER.info("loaded appenv, env {} zkserver {}", deployenv, zkserver);

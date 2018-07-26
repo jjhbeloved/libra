@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.cli.callback;
 
-import cd.blog.humbird.libra.cli.ClientEnvironment;
+import cd.blog.humbird.libra.cli.ClientEnv;
 import cd.blog.humbird.libra.cli.model.ClientStatus;
 import cd.blog.humbird.libra.common.Constants;
 import cd.blog.humbird.libra.common.util.JsonUtil;
@@ -39,6 +39,6 @@ public class LibraClientStatusCallback extends AbstractCallback {
     }
 
     private String createPath() {
-        return String.format(STATUS_PATH, ClientEnvironment.getAppName(), SystemUtil.getIPv4Host(), SystemUtil.getPID());
+        return String.format(STATUS_PATH, ClientEnv.getAppName(), SystemUtil.getIPv4Host(), SystemUtil.getPID());
     }
 }

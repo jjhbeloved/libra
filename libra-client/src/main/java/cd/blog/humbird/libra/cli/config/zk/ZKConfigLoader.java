@@ -1,10 +1,12 @@
 package cd.blog.humbird.libra.cli.config.zk;
 
+import cd.blog.humbird.libra.cli.ClientEnv;
 import cd.blog.humbird.libra.cli.config.AbstractConfigLoader;
+import cd.blog.humbird.libra.cli.config.ConfigLoader;
+import cd.blog.humbird.libra.cli.model.ConfigValue;
 import cd.blog.humbird.libra.common.Constants;
-import cd.blog.humbird.libra.common.zk.ZKCli;
 import cd.blog.humbird.libra.common.util.ZKUtil;
-import com.google.common.collect.Maps;
+import cd.blog.humbird.libra.common.zk.ZKCli;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorListener;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
@@ -13,7 +15,7 @@ import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ConcurrentMap;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -24,22 +26,24 @@ public class ZKConfigLoader extends AbstractConfigLoader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ZKConfigLoader.class);
     private AtomicBoolean closed = new AtomicBoolean(false);
-    private ConcurrentMap<String, ZKValue> keyValues;
-
     private String servers;
     private String namespace;
     private CuratorListener listener;
     private CuratorFramework cli;
     private ZKCli zkCli;
 
+    public ZKConfigLoader() {
+        this(null);
+    }
+
     public ZKConfigLoader(String servers) {
         this(servers, null);
     }
 
     public ZKConfigLoader(String servers, String namespace) {
-        this.servers = servers;
+        this.servers = Optional.ofNullable(servers)
+                .orElse(System.getProperty(ConfigLoader.KEY_ZOOKEEPER_ADDRESS, ClientEnv.getZkserver()));
         this.namespace = namespace;
-        this.keyValues = Maps.newConcurrentMap();
     }
 
     @Override
@@ -53,21 +57,12 @@ public class ZKConfigLoader extends AbstractConfigLoader {
         }));
     }
 
-    public ConcurrentMap<String, ZKValue> getKeyValues() {
-        return keyValues;
+    @Override
+    public ConfigValue get(String key) {
+        return getZKValue(key);
     }
 
-    public void changed(String key, ZKValue value) {
-        keyValues.put(key, value);
-        LOGGER.info("++++++++++++ config deleted, key:{},val:{}", key, value);
-    }
-
-    public void deleted(String key) {
-        ZKValue preVal = keyValues.remove(key);
-        LOGGER.info("------------ config deleted, key:{},previous value:{}", key, preVal);
-    }
-
-    public ZKValue getZKValue(String key) {
+    ZKValue getZKValue(String key) {
         return getValue(ZKUtil.getConfigPath(key));
     }
 
@@ -112,7 +107,7 @@ public class ZKConfigLoader extends AbstractConfigLoader {
         if (val != null) {
             value = new ZKValue();
             value.setKey(path);
-            value.setValue(val);
+            value.setVal(val);
             value.setVersion(String.format(Constants.VERSION_FORMAT, stat.getMtime(), stat.getVersion()));
         }
         return value;

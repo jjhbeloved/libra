@@ -35,10 +35,13 @@ Libra-配置中心
    ```
    配置中心使用 listener.addListener添加针对 getData和existsData的监听(changed/created/deleted)事件, 
    获取数据并且缓存在本地
+3. ClassLoader子类都对数据进行缓存, ConfigCache又做了一级缓存浪费一倍内存
 
 ## fixed
 1. 使用 springCache解决缓存穿透问题, 使用 springCache composite 合并多种缓存
-   
+2. 使用curator监听watched
+3. ClassLoader作为基础服务, 不进行数据缓存, 由ClassLoader的合集ConfigCache进行缓存, 减少内存
+
 ## 产品需求
 1. 配置管理
 2. 用户管理
