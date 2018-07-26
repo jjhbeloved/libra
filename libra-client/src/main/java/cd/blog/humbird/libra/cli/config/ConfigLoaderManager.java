@@ -18,7 +18,7 @@ public class ConfigLoaderManager {
     private List<ConfigLoader> configLoaders;
     private static volatile ConfigLoaderManager configLoaderManager;
 
-    ConfigLoaderManager() {
+    private ConfigLoaderManager() {
         init();
     }
 

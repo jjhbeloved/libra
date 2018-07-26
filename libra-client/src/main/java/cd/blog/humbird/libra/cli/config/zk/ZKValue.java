@@ -8,13 +8,4 @@ import cd.blog.humbird.libra.cli.model.ConfigValue;
  */
 public class ZKValue extends ConfigValue {
 
-    private String version;
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
 }

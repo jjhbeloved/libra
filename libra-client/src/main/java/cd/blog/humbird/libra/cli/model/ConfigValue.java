@@ -10,16 +10,16 @@ import java.io.Serializable;
  */
 public class ConfigValue implements Serializable {
 
-    private String key;
-
     private String val;
 
-    public String getKey() {
-        return key;
+    private String version;
+
+    public ConfigValue() {
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public ConfigValue(String val, String version) {
+        this.val = val;
+        this.version = version;
     }
 
     public String getVal() {
@@ -28,6 +28,14 @@ public class ConfigValue implements Serializable {
 
     public void setVal(String val) {
         this.val = val;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     @Override

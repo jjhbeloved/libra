@@ -7,15 +7,6 @@ import cd.blog.humbird.libra.cli.model.ConfigValue;
  */
 public interface ConfigLoader {
 
-    /**
-     * Default placeholder prefix: "${"
-     */
-    String DEFAULT_PLACEHOLDER_PREFIX = "${";
-    /**
-     * Default placeholder suffix: "}"
-     */
-    String DEFAULT_PLACEHOLDER_SUFFIX = "}";
-
     String KEY_PROPERTIES_FILE = "propertiesFile";
     String KEY_INCLUDE_LOCAL_PROPS = "includeLocalProps";
     String KEY_ZOOKEEPER_ADDRESS = "zookeeperAddress";

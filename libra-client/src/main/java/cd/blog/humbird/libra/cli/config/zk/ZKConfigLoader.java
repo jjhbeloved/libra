@@ -106,7 +106,6 @@ public class ZKConfigLoader extends AbstractConfigLoader {
         String val = this.zkCli.getWatched(path, stat);
         if (val != null) {
             value = new ZKValue();
-            value.setKey(path);
             value.setVal(val);
             value.setVersion(String.format(Constants.VERSION_FORMAT, stat.getMtime(), stat.getVersion()));
         }
