@@ -20,7 +20,8 @@ public class Constants {
 
 
     public static final String CONFIG_PATH = "/HUMBIRD/LIBRA";
-    public static final String STATUS_PATH_PREFIX = "/LIBRA/status";
+    public static final String CALLBACK_STATUS_PATH_PREFIX = "/LIBRA/CALLBACK/status";
+    public static final String CALLBACK_CONFIG_KEYS_PATH_PREFIX = "/LIBRA/CALLBACK/config/";
     public static final String PATH_SEPARATOR = "/";
 
     /**

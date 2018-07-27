@@ -65,6 +65,18 @@ public class ConfigLoaderManager {
         return null;
     }
 
+    public void addConfigListener(ConfigListener configListener) {
+        for (ConfigLoader configLoader : configLoaders) {
+            configLoader.addConfigListener(configListener);
+        }
+    }
+
+    public void removeConfigListener() {
+        for (ConfigLoader configLoader : configLoaders) {
+            configLoader.removeConfigListener();
+        }
+    }
+
     private void init() {
         configLoaders = Lists.newLinkedList();
         configLoaders.add(new ZKConfigLoader());

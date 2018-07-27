@@ -27,9 +27,7 @@ public interface ConfigLoader {
 
     /**
      * 情况配置监听器
-     *
-     * @param configListener 置监听器
      */
-    void removeConfigListener(ConfigListener configListener);
+    void removeConfigListener();
 
 }

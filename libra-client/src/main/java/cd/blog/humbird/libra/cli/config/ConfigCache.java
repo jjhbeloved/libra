@@ -2,10 +2,13 @@ package cd.blog.humbird.libra.cli.config;
 
 import cd.blog.humbird.libra.cli.ClientEnv;
 import cd.blog.humbird.libra.cli.config.zk.ZKConfigLoader;
+import cd.blog.humbird.libra.cli.model.ConfigEvent;
 import cd.blog.humbird.libra.cli.model.ConfigValue;
 import cd.blog.humbird.libra.common.Constants;
 import cd.blog.humbird.libra.common.util.KeyUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,8 +17,9 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by david on 2018/7/26.
  */
-public class ConfigCache {
+public class ConfigCache implements ConfigListener {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigCache.class);
     private static volatile ConfigCache configCache;
     private String server;
     private ConfigLoaderManager configLoaderManager;
@@ -31,6 +35,7 @@ public class ConfigCache {
         }
         System.setProperty(ConfigLoader.KEY_ZOOKEEPER_ADDRESS, server);
         this.configLoaderManager = ConfigLoaderManager.instance();
+        this.configLoaderManager.addConfigListener(this);
         this.zkConfigLoader = this.configLoaderManager.getClassLoader(ZKConfigLoader.class);
     }
 
@@ -49,6 +54,32 @@ public class ConfigCache {
         return configCache;
     }
 
+    @Override
+    public void refresh(ConfigEvent event) {
+        if (event.getKey() == null) {
+            return;
+        }
+        String key = event.getKey();
+        String version = event.getVersion();
+        String value = event.getValue();
+        if (event.isDeleted()) {
+            ConfigValue existsConfigValue = cachedConfig.remove(key);
+            LOGGER.info("------------ config deleted, key:{},previous value:{},ver:{}", key, existsConfigValue.getVal(), existsConfigValue.getVersion());
+            return;
+        }
+        ConfigValue existsConfigValue = cachedConfig.get(key);
+        if (existsConfigValue == null) {
+            cachedConfig.put(key, new ConfigValue(value, version));
+            LOGGER.info("++++++++++++ config changed, key:{},val:{},ver:{}", key, value, version);
+            return;
+        }
+        if (version.compareTo(existsConfigValue.getVersion()) > 0) {
+            existsConfigValue.setVersion(version);
+            existsConfigValue.setVal(value);
+            LOGGER.info("++++++++++++ config ver changed, key:{},val:{},ver:{}", key, value, version);
+        }
+    }
+
     public Properties getLocalProps() {
         return localProps;
     }
@@ -63,6 +94,14 @@ public class ConfigCache {
             return null;
         }
         return configValue.getVal();
+    }
+
+    public void callClientConfigVersion(String key, ConfigValue configValue) {
+        if (configValue == null) {
+            zkConfigLoader.callClientConfigVersion(new ConfigEvent(key, null, null));
+        } else {
+            zkConfigLoader.callClientConfigVersion(new ConfigEvent(key, configValue.getVal(), configValue.getVersion()));
+        }
     }
 
     /**
@@ -97,14 +136,17 @@ public class ConfigCache {
      * @return val
      */
     private ConfigValue getValueFromCache(String key) {
+        ConfigValue configValue;
         if (ClientEnv.isReadCache()) {
-            return cachedConfig.get(key);
+            configValue = cachedConfig.get(key);
+            if (configValue != null) {
+                return configValue;
+            }
+            configValue = configLoaderManager.get(key);
+            cachedConfig.put(key, configValue);
+        } else {
+            configValue = configLoaderManager.get(key);
         }
-        ConfigValue configValue = configLoaderManager.get(key);
-        if (configValue == null) {
-            return null;
-        }
-        cachedConfig.put(key, configValue);
         return configValue;
     }
 }

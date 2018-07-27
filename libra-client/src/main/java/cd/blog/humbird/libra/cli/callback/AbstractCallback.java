@@ -18,13 +18,15 @@ public abstract class AbstractCallback implements Callback {
     protected ConcurrentHashMap<String, String> ephemeralNodes = new ConcurrentHashMap<>();
     protected ZKCli zkCli;
 
-    @Override
+    public AbstractCallback(ZKCli zkCli) {
+        this.zkCli = zkCli;
+    }
+
     public void create(String path, String val) {
         zkCli.createOrSet(path, CreateMode.EPHEMERAL, val);
         ephemeralNodes.put(path, val);
     }
 
-    @Override
     public void reCreate() {
         for (Map.Entry<String, String> entry : ephemeralNodes.entrySet()) {
             String path = entry.getKey();
@@ -36,7 +38,6 @@ public abstract class AbstractCallback implements Callback {
         }
     }
 
-    @Override
     public void delete(String path) {
         zkCli.deleteAndChildren(path);
         ephemeralNodes.remove(path);

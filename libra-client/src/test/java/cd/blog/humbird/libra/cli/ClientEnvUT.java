@@ -18,4 +18,12 @@ public class ClientEnvUT extends BaseUT {
         Assert.assertTrue(ClientEnv.isReadCache());
         Assert.assertEquals(ClientEnv.getSyncInterval(), 1800000);
     }
+
+    @Test
+    public void x() throws InterruptedException {
+        while (true) {
+            System.out.println(Libra.get("libra.name"));
+            Thread.sleep(2000);
+        }
+    }
 }

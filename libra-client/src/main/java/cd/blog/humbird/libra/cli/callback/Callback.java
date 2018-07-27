@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.cli.callback;
 
-import cd.blog.humbird.libra.common.zk.ZKCli;
+import cd.blog.humbird.libra.cli.model.ConfigEvent;
 
 /**
  * @author david
@@ -8,25 +8,10 @@ import cd.blog.humbird.libra.common.zk.ZKCli;
  */
 public interface Callback {
 
-    void setZKCli(ZKCli zkCli);
-
     /**
-     * 创建回调信息
+     * 回调
      *
-     * @param path 地址
-     * @param val  信息
+     * @param event 信息
      */
-    void create(String path, String val);
-
-    /**
-     * 重试创建回调信息
-     */
-    void reCreate();
-
-    /**
-     * 删除回调信息
-     *
-     * @param path 地址
-     */
-    void delete(String path);
+    void call(ConfigEvent event);
 }

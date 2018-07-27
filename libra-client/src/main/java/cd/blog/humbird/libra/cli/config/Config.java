@@ -27,16 +27,19 @@ public class Config {
     }
 
     public String get(String key) {
-        if (StringUtils.isBlank(key)) {
+        ConfigValue configValue = getValue(key);
+        if (configValue == null) {
             return null;
         }
-        return configCache.get(key);
+        return configValue.getVal();
     }
 
     public ConfigValue getValue(String key) {
         if (StringUtils.isBlank(key)) {
             return null;
         }
-        return configCache.getValue(key);
+        ConfigValue configValue = configCache.getValue(key);
+        configCache.callClientConfigVersion(key, configValue);
+        return configValue;
     }
 }

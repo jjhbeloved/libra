@@ -1,8 +1,13 @@
 package cd.blog.humbird.libra.cli.config.zk;
 
 import cd.blog.humbird.libra.cli.ClientEnv;
+import cd.blog.humbird.libra.cli.callback.Callback;
+import cd.blog.humbird.libra.cli.callback.CallbackManager;
+import cd.blog.humbird.libra.cli.callback.ClientConfigVersionCallback;
+import cd.blog.humbird.libra.cli.callback.LibraClientStatusCallback;
 import cd.blog.humbird.libra.cli.config.AbstractConfigLoader;
 import cd.blog.humbird.libra.cli.config.ConfigLoader;
+import cd.blog.humbird.libra.cli.model.ConfigEvent;
 import cd.blog.humbird.libra.cli.model.ConfigValue;
 import cd.blog.humbird.libra.common.Constants;
 import cd.blog.humbird.libra.common.util.ZKUtil;
@@ -31,6 +36,9 @@ public class ZKConfigLoader extends AbstractConfigLoader {
     private CuratorListener listener;
     private CuratorFramework cli;
     private ZKCli zkCli;
+    private CallbackManager callbackManager;
+    private Callback clientConfigCallback;
+    private Callback clientStatusCallback;
 
     public ZKConfigLoader() {
         this(null);
@@ -50,11 +58,31 @@ public class ZKConfigLoader extends AbstractConfigLoader {
     public void init() {
         this.listener = new ZKListener(this);
         this.cli = createCli();
-        this.zkCli = new ZKCli(this.cli);
+        this.zkCli = new ZKCli(cli);
+        this.callbackManager = CallbackManager.instance(zkCli);
+        clientConfigCallback = callbackManager.getClassLoader(ClientConfigVersionCallback.class);
+        clientStatusCallback = callbackManager.getClassLoader(LibraClientStatusCallback.class);
+        clientStatusCallback.call(new ConfigEvent(null, null));
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             LOGGER.info("zk class loader run shutdown hook...");
             destroy();
         }));
+    }
+
+    public void callClientStatus(ConfigEvent event) {
+        clientStatusCallback.call(event);
+    }
+
+    public void callClientConfigVersion(ConfigEvent event) {
+        clientConfigCallback.call(event);
+    }
+
+    public void changed(String key, ZKValue zkValue) {
+        refresh(new ConfigEvent(key, zkValue.getVal(), zkValue.getVersion()));
+    }
+
+    public void deleted(String key) {
+        refresh(new ConfigEvent(key));
     }
 
     @Override
@@ -108,7 +136,20 @@ public class ZKConfigLoader extends AbstractConfigLoader {
             value = new ZKValue();
             value.setVal(val);
             value.setVersion(String.format(Constants.VERSION_FORMAT, stat.getMtime(), stat.getVersion()));
+        } else {
+            LOGGER.info("not found {} val.", path);
         }
         return value;
+    }
+
+    /**
+     * 请求变更事件给配置监听器
+     *
+     * @param event 时间
+     */
+    private void refresh(ConfigEvent event) {
+        if (getConfigListener() != null) {
+            getConfigListener().refresh(event);
+        }
     }
 }

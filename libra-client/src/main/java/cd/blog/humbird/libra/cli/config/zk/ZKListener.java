@@ -1,6 +1,7 @@
 package cd.blog.humbird.libra.cli.config.zk;
 
 import cd.blog.humbird.libra.common.util.ZKUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEvent;
 import org.apache.curator.framework.api.CuratorEventType;
@@ -63,11 +64,16 @@ public class ZKListener implements CuratorListener {
      * @param key
      */
     private void configChanged(String key) {
-        configLoader.getZKValue(key);
+        ZKValue zkValue = configLoader.getZKValue(key);
+        if (zkValue == null || StringUtils.isBlank(zkValue.getVal())) {
+            LOGGER.info("ignored config change, key:{} is null", key);
+            return;
+        }
+        configLoader.changed(key, zkValue);
     }
 
     private void configDeleted(String key) {
-
+        configLoader.deleted(key);
     }
 
 }
