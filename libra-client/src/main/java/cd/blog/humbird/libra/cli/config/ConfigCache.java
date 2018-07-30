@@ -4,8 +4,8 @@ import cd.blog.humbird.libra.cli.ClientEnv;
 import cd.blog.humbird.libra.cli.config.zk.ZKConfigLoader;
 import cd.blog.humbird.libra.cli.model.ConfigEvent;
 import cd.blog.humbird.libra.cli.model.ConfigValue;
-import cd.blog.humbird.libra.common.Constants;
-import cd.blog.humbird.libra.common.util.KeyUtil;
+import cd.blog.humbird.libra.common.constant.Parameter;
+import cd.blog.humbird.libra.common.util.KeyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,10 +118,10 @@ public class ConfigCache implements ConfigListener {
         if (localProps != null) {
             String val = localProps.getProperty(key);
             if (val != null) {
-                if (KeyUtil.isReferenceValue(val)) {
-                    key = KeyUtil.getReferencedKey(val);
+                if (KeyUtils.isReferenceValue(val)) {
+                    key = KeyUtils.getReferencedKey(val);
                 } else {
-                    return new ConfigValue(val, Constants.LOCAL_VERSION);
+                    return new ConfigValue(val, Parameter.LOCAL_VERSION);
                 }
             }
         }

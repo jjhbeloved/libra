@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.cli.config.zk;
 
-import cd.blog.humbird.libra.common.util.ZKUtil;
+import cd.blog.humbird.libra.common.util.ZKUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEvent;
@@ -44,7 +44,7 @@ public class ZKListener implements CuratorListener {
 
     private void process(WatchedEvent watchedEvent) {
         String path = watchedEvent.getPath();
-        String key = ZKUtil.getConfigKey(path);
+        String key = ZKUtils.getConfigKey(path);
         if (key == null) {
             LOGGER.info("failed to get config key, path: {}", path);
             return;

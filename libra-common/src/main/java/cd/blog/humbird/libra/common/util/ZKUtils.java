@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.common.util;
 
-import cd.blog.humbird.libra.common.Constants;
+import cd.blog.humbird.libra.common.constant.LibraPath;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -10,7 +10,7 @@ import org.apache.curator.retry.RetryNTimes;
  * @author david
  * @since created by on 18/7/25 01:12
  */
-public class ZKUtil {
+public class ZKUtils {
     public static CuratorFramework createCuratorCli(String servers) {
         return createCuratorCli(servers, null);
     }
@@ -26,13 +26,13 @@ public class ZKUtil {
     }
 
     public static String getConfigKey(String path) {
-        if (!StringUtils.startsWith(path, Constants.CONFIG_PATH)) {
+        if (!StringUtils.startsWith(path, LibraPath.CONFIG_PATH)) {
             return null;
         }
-        return path.substring(Constants.CONFIG_PATH.length() + 1);
+        return path.substring(LibraPath.CONFIG_PATH.length() + 1);
     }
 
     public static String getConfigPath(String key) {
-        return Constants.CONFIG_PATH + Constants.PATH_SEPARATOR + key;
+        return LibraPath.CONFIG_PATH + LibraPath.PATH_SEPARATOR + key;
     }
 }

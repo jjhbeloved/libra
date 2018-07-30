@@ -2,7 +2,7 @@ package cd.blog.humbird.libra.cli.callback;
 
 import cd.blog.humbird.libra.cli.ClientEnv;
 import cd.blog.humbird.libra.cli.model.ConfigEvent;
-import cd.blog.humbird.libra.common.Constants;
+import cd.blog.humbird.libra.common.constant.LibraPath;
 import cd.blog.humbird.libra.common.zk.ZKCli;
 
 /**
@@ -11,7 +11,7 @@ import cd.blog.humbird.libra.common.zk.ZKCli;
 public class ClientConfigVersionCallback extends AbstractCallback {
 
     // /LIBRA/CALLBACK/config/${appName}/${key}
-    private static final String CONFIG_KEYS_PATH = Constants.CALLBACK_CONFIG_KEYS_PATH_PREFIX + "/%s/%s";
+    private static final String CONFIG_KEYS_PATH = LibraPath.CALLBACK_CONFIG_KEYS_PATH_PREFIX + "/%s/%s";
 
     public ClientConfigVersionCallback(ZKCli zkCli) {
         super(zkCli);

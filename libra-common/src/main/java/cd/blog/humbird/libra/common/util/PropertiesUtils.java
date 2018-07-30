@@ -15,9 +15,9 @@ import java.util.Properties;
  * @author david
  * @since created by on 18/7/5 01:50
  */
-public class PropertiesUtil {
+public class PropertiesUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesUtils.class);
 
     private static final String SCHEMA_CLASSPATH = "classpath:";
 

@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.cli;
 
-import cd.blog.humbird.libra.common.Constants;
-import cd.blog.humbird.libra.common.util.PropertiesUtil;
+import cd.blog.humbird.libra.common.constant.Parameter;
+import cd.blog.humbird.libra.common.util.PropertiesUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class ClientEnv {
      * 加载 libra 内部缓存刷新变量
      */
     public static void loadConfigFile() {
-        Properties props = PropertiesUtil.load("classpath:libra.properties");
+        Properties props = PropertiesUtils.load("classpath:libra.properties");
         if (props != null) {
             String cache = props.getProperty("readCache");
             String interval = props.getProperty("syncInterval");
@@ -75,7 +75,7 @@ public class ClientEnv {
         }
         // load from CLASSPATH
         if (properties == null) {
-            properties = PropertiesUtil.load("classpath:appenv");
+            properties = PropertiesUtils.load("classpath:appenv");
         }
         // {{预留扩展}} 这里读基础环境的appenv, 在基础模块会自动生成对应项目的appenv
         // load from /home/admin/${projectName}/appenv
@@ -86,7 +86,7 @@ public class ClientEnv {
                 String projectName = matcher.group(1);
                 String p = "/home/admin/" + projectName + "/appenv";
                 LOGGER.info("load appenv from {}", p);
-                props = PropertiesUtil.load(p);
+                props = PropertiesUtils.load(p);
             }
         }
         // check and using default values
@@ -106,13 +106,13 @@ public class ClientEnv {
     }
 
     private static void checkAppEnv(Properties properties) {
-        zkserver = StringUtils.trim(properties.getProperty(Constants.KEY_ZKSERVER, Constants.DEFAULT_ZKSERVER));
-        deployenv = StringUtils.trim(properties.getProperty(Constants.KEY_DEPLOYENV, Constants.DEFAULT_DEPLOYENV));
+        zkserver = StringUtils.trim(properties.getProperty(Parameter.KEY_ZKSERVER, Parameter.DEFAULT_ZKSERVER));
+        deployenv = StringUtils.trim(properties.getProperty(Parameter.KEY_DEPLOYENV, Parameter.DEFAULT_DEPLOYENV));
         if (appName == null) {
-            properties.getProperty(Constants.APP_NAME);
+            properties.getProperty(Parameter.APP_NAME);
         }
         if (appVersion == null) {
-            properties.getProperty(Constants.APP_VERSION);
+            properties.getProperty(Parameter.APP_VERSION);
         }
     }
 
@@ -120,7 +120,7 @@ public class ClientEnv {
         int idx = path.indexOf(alias);
         if (idx != -1) {
             String fs = path.substring(0, idx + (alias.length() + 1)).concat("appenv");
-            return PropertiesUtil.load(fs);
+            return PropertiesUtils.load(fs);
         }
         return null;
     }

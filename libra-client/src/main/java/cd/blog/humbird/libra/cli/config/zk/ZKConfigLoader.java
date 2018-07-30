@@ -9,8 +9,8 @@ import cd.blog.humbird.libra.cli.config.AbstractConfigLoader;
 import cd.blog.humbird.libra.cli.config.ConfigLoader;
 import cd.blog.humbird.libra.cli.model.ConfigEvent;
 import cd.blog.humbird.libra.cli.model.ConfigValue;
-import cd.blog.humbird.libra.common.Constants;
-import cd.blog.humbird.libra.common.util.ZKUtil;
+import cd.blog.humbird.libra.common.constant.Parameter;
+import cd.blog.humbird.libra.common.util.ZKUtils;
 import cd.blog.humbird.libra.common.zk.ZKCli;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorListener;
@@ -91,11 +91,11 @@ public class ZKConfigLoader extends AbstractConfigLoader {
     }
 
     ZKValue getZKValue(String key) {
-        return getValue(ZKUtil.getConfigPath(key));
+        return getValue(ZKUtils.getConfigPath(key));
     }
 
     private CuratorFramework createCli() {
-        CuratorFramework cli = ZKUtil.createCuratorCli(servers);
+        CuratorFramework cli = ZKUtils.createCuratorCli(servers);
         cli.getConnectionStateListenable().addListener((client, newState) -> {
             LOGGER.info("libra zookeeper state: " + newState);
             if (newState == ConnectionState.RECONNECTED) {
@@ -135,7 +135,7 @@ public class ZKConfigLoader extends AbstractConfigLoader {
         if (val != null) {
             value = new ZKValue();
             value.setVal(val);
-            value.setVersion(String.format(Constants.VERSION_FORMAT, stat.getMtime(), stat.getVersion()));
+            value.setVersion(String.format(Parameter.VERSION_FORMAT, stat.getMtime(), stat.getVersion()));
         } else {
             LOGGER.info("not found {} val.", path);
         }

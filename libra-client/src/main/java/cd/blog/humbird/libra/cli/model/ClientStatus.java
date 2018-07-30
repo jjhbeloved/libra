@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.cli.model;
 
 import cd.blog.humbird.libra.cli.ClientEnv;
-import cd.blog.humbird.libra.common.util.SystemUtil;
+import cd.blog.humbird.libra.common.util.SystemUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,8 +13,8 @@ import java.io.Serializable;
  */
 public class ClientStatus implements Serializable {
 
-    private String host = SystemUtil.getIPv4Host();
-    private String pid = SystemUtil.getPID();
+    private String host = SystemUtils.getIPv4Host();
+    private String pid = SystemUtils.getPID();
     private String appName = ClientEnv.getAppName();
     private String appVer = ClientEnv.getAppVersion();
     private String appEnv = ClientEnv.getEnv().toUpperCase();

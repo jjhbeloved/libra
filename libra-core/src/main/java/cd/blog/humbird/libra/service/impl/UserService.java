@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.service;
+package cd.blog.humbird.libra.service.impl;
 
 import cd.blog.humbird.libra.entity.OpLog;
 import cd.blog.humbird.libra.entity.User;

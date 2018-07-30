@@ -16,9 +16,9 @@ import java.util.Enumeration;
  * @author david
  * @since created by on 18/7/25 23:15
  */
-public class SystemUtil {
+public class SystemUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SystemUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SystemUtils.class);
 
     private static String pid;
     private static String host;

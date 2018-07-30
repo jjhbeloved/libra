@@ -3,9 +3,9 @@ package cd.blog.humbird.libra.cli.callback;
 import cd.blog.humbird.libra.cli.ClientEnv;
 import cd.blog.humbird.libra.cli.model.ClientStatus;
 import cd.blog.humbird.libra.cli.model.ConfigEvent;
-import cd.blog.humbird.libra.common.Constants;
-import cd.blog.humbird.libra.common.util.JsonUtil;
-import cd.blog.humbird.libra.common.util.SystemUtil;
+import cd.blog.humbird.libra.common.constant.LibraPath;
+import cd.blog.humbird.libra.common.util.JsonUtils;
+import cd.blog.humbird.libra.common.util.SystemUtils;
 import cd.blog.humbird.libra.common.zk.ZKCli;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class LibraClientStatusCallback extends AbstractCallback {
 
     private static final Logger logger = LoggerFactory.getLogger(LibraClientStatusCallback.class);
     // /LIBRA/CALLBACK/status/${appName}/${ip}-${pid}
-    private static final String STATUS_PATH = Constants.CALLBACK_STATUS_PATH_PREFIX + "/%s/%s-%s";
+    private static final String STATUS_PATH = LibraPath.CALLBACK_STATUS_PATH_PREFIX + "/%s/%s-%s";
 
     public LibraClientStatusCallback(ZKCli zkCli) {
         super(zkCli);
@@ -31,7 +31,7 @@ public class LibraClientStatusCallback extends AbstractCallback {
             clientStatus.setTag(event.getKey());
             clientStatus.setMsg(event.getValue());
             String path = createPath();
-            String content = JsonUtil.toJson(clientStatus);
+            String content = JsonUtils.toJson(clientStatus);
             create(path, content);
             logger.info("libra client status callback success,path={},value={}", path, content);
         } catch (Exception e) {
@@ -40,6 +40,6 @@ public class LibraClientStatusCallback extends AbstractCallback {
     }
 
     private String createPath() {
-        return String.format(STATUS_PATH, ClientEnv.getAppName(), SystemUtil.getIPv4Host(), SystemUtil.getPID());
+        return String.format(STATUS_PATH, ClientEnv.getAppName(), SystemUtils.getIPv4Host(), SystemUtils.getPID());
     }
 }

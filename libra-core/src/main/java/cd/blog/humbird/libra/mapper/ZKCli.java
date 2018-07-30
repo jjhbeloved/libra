@@ -1,7 +1,7 @@
 //package cd.blog.humbird.libra.mapper;
 //
 //import cd.blog.humbird.libra.cli.Constants;
-//import cd.blog.humbird.libra.util.EncodeUtil;
+//import cd.blog.humbird.libra.util.EncodeUtils;
 //import org.apache.curator.framework.CuratorFramework;
 //import org.apache.curator.framework.CuratorFrameworkFactory;
 //import org.apache.curator.retry.RetryNTimes;
@@ -109,7 +109,7 @@
 //
 //    public void create(String path, String data) throws Exception {
 //        try {
-//            client.create().creatingParentsIfNeeded().forPath(path, data.getBytes(EncodeUtil.CHARSET));
+//            client.create().creatingParentsIfNeeded().forPath(path, data.getBytes(EncodeUtils.CHARSET));
 //        } catch (Exception e) {
 //            LOGGER.error("failed to create path:{},data:{},exception:", path, data, e);
 //            throw e;
@@ -127,7 +127,7 @@
 //
 //    public void set(String path, String data) throws Exception {
 //        try {
-//            client.setData().forPath(path, data.getBytes(EncodeUtil.CHARSET));
+//            client.setData().forPath(path, data.getBytes(EncodeUtils.CHARSET));
 //        } catch (Exception e) {
 //            LOGGER.error("failed to set path:{},data{},exception:", path, data, e);
 //            throw e;

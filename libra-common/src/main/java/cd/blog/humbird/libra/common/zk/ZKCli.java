@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.common.zk;
 
-import cd.blog.humbird.libra.common.Constants;
+import cd.blog.humbird.libra.common.constant.Parameter;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
@@ -45,7 +45,7 @@ public class ZKCli {
 
     public String get(String path) {
         try {
-            return new String(client.getData().forPath(path), Constants.CHARSET);
+            return new String(client.getData().forPath(path), Parameter.CHARSET);
         } catch (Exception e) {
             LOGGER.error("failed get path:{},exception:{}", path, e.getMessage());
         }
@@ -54,7 +54,7 @@ public class ZKCli {
 
     public String get(String path, Stat stat) {
         try {
-            return new String(client.getData().storingStatIn(stat).forPath(path), Constants.CHARSET);
+            return new String(client.getData().storingStatIn(stat).forPath(path), Parameter.CHARSET);
         } catch (Exception e) {
             LOGGER.error("failed get path:{} stat:{},exception:{}", path, stat, e.getMessage());
         }
@@ -63,7 +63,7 @@ public class ZKCli {
 
     public String getWatched(String path) {
         try {
-            return new String(client.getData().watched().forPath(path), Constants.CHARSET);
+            return new String(client.getData().watched().forPath(path), Parameter.CHARSET);
         } catch (Exception e) {
             LOGGER.error("failed to get path:{} watched,exception:{}", path, e.getMessage());
         }
@@ -72,7 +72,7 @@ public class ZKCli {
 
     public String getWatched(String path, Stat stat) {
         try {
-            return new String(client.getData().storingStatIn(stat).watched().forPath(path), Constants.CHARSET);
+            return new String(client.getData().storingStatIn(stat).watched().forPath(path), Parameter.CHARSET);
         } catch (Exception e) {
             LOGGER.error("failed to get path:{} stat:{},exception:{}", path, stat, e.getMessage());
         }
@@ -95,7 +95,7 @@ public class ZKCli {
 
     public boolean create(String path, CreateMode mode, String data) {
         try {
-            return create(path, mode, data.getBytes(Constants.CHARSET));
+            return create(path, mode, data.getBytes(Parameter.CHARSET));
         } catch (UnsupportedEncodingException e) {
             LOGGER.error("failed to create path:{},data:{},exception:{}", path, data, e.getMessage());
         }
@@ -118,7 +118,7 @@ public class ZKCli {
 
     public boolean set(String path, String data) {
         try {
-            return set(path, data.getBytes(Constants.CHARSET));
+            return set(path, data.getBytes(Parameter.CHARSET));
         } catch (UnsupportedEncodingException e) {
             LOGGER.error("failed to set path:{},data:{},exception:{}", path, data, e.getMessage());
         }
@@ -141,7 +141,7 @@ public class ZKCli {
 
     public boolean createOrSet(String path, CreateMode mode, String data) {
         try {
-            return createOrSet(path, mode, data.getBytes(Constants.CHARSET));
+            return createOrSet(path, mode, data.getBytes(Parameter.CHARSET));
         } catch (UnsupportedEncodingException e) {
             LOGGER.error("failed to createOrSet path:{},data:{},exception:{}", path, data, e.getMessage());
         }

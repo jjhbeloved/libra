@@ -4,7 +4,7 @@ import cd.blog.humbird.libra.BaseIT;
 import cd.blog.humbird.libra.entity.User;
 import cd.blog.humbird.libra.exception.IncorrectPasswdException;
 import cd.blog.humbird.libra.model.vo.UserCriteria;
-import cd.blog.humbird.libra.service.UserService;
+import cd.blog.humbird.libra.service.impl.UserService;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;

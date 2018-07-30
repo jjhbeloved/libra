@@ -5,7 +5,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by david on 2018/7/11.
  */
-public class EncodeUtil {
+public class EncodeUtils {
 
     public static final String CHARSET = "UTF-8";
 

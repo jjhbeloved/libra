@@ -6,7 +6,7 @@ import com.google.gson.Gson;
  * @author david
  * @since created by on 18/7/25 23:30
  */
-public class JsonUtil {
+public class JsonUtils {
 
     private static final Gson gson = new Gson();
 
