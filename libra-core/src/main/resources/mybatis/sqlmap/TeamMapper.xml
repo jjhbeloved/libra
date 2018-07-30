@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cd.blog.humbird.libra.mapper.TeamMapper">
 
-    <resultMap id="BaseResult" type="cd.blog.humbird.libra.entity.Team">
+    <resultMap id="BaseResult" type="cd.blog.humbird.libra.model.po.TeamPO">
         <id column="id" property="id"/>
         <result column="gmt_created" property="gmtCreated"/>
         <result column="modifier" property="modifier"/>
@@ -11,13 +11,13 @@
         <result column="name" property="name"/>
     </resultMap>
 
-    <select id="findAll" resultMap="BaseResult">
+    <select id="listAll" resultMap="BaseResult">
         SELECT *
         FROM team
         ORDER BY id
     </select>
 
-    <select id="findTeams" resultMap="BaseResult">
+    <select id="listTeams" resultMap="BaseResult">
         SELECT *
         FROM team
         <if test="name == true">
@@ -25,14 +25,14 @@
         </if>
     </select>
 
-    <select id="findById" resultMap="BaseResult">
+    <select id="getById" resultMap="BaseResult">
         SELECT *
         FROM user
         WHERE id = #{id}
         ORDER BY id
     </select>
 
-    <select id="findByName" resultMap="BaseResult">
+    <select id="getByName" resultMap="BaseResult">
         SELECT *
         FROM team
         WHERE name = #{name}

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cd.blog.humbird.libra.mapper.ConfigMapper">
 
-    <resultMap id="ConfigResult" type="cd.blog.humbird.libra.entity.Config">
+    <resultMap id="ConfigResult" type="cd.blog.humbird.libra.model.po.ConfigPO">
         <id column="id" property="id"/>
         <result column="gmt_created" property="gmtCreated"/>
         <result column="modifier" property="modifier"/>
@@ -29,14 +29,14 @@
         </where>
     </sql>
 
-    <select id="findConfigById" resultMap="ConfigResult">
+    <select id="getConfigById" resultMap="ConfigResult">
         SELECT *
         FROM config
         WHERE id = #{id}
         ORDER BY id
     </select>
 
-    <select id="findConfigByKeyAndProjectId" resultMap="ConfigResult">
+    <select id="getConfigByKeyAndProjectId" resultMap="ConfigResult">
         SELECT *
         FROM config
         WHERE 1=1
@@ -49,35 +49,35 @@
         ORDER BY id
     </select>
 
-    <select id="findConfigByKey" resultMap="ConfigResult">
+    <select id="listConfigsByKey" resultMap="ConfigResult">
         SELECT *
         FROM config
         WHERE `key` = #{key}
         ORDER BY id
     </select>
 
-    <select id="findConfigByKeyParttern" resultMap="ConfigResult">
+    <select id="listConfigsByKeyParttern" resultMap="ConfigResult">
         SELECT *
         FROM config
         WHERE `key` LIKE CONCAT('%', #{key}, '%')
         ORDER BY id
     </select>
 
-    <select id="findConfigByCreatorId" resultMap="ConfigResult">
+    <select id="listConfigsByCreatorId" resultMap="ConfigResult">
         SELECT *
         FROM config
         WHERE creatorId = #{creatorId}
         ORDER BY id
     </select>
 
-    <select id="findConfigByProjectId" resultMap="ConfigResult">
+    <select id="listConfigsByProjectId" resultMap="ConfigResult">
         SELECT *
         FROM config
         WHERE projectId = #{projectId}
         ORDER BY id
     </select>
 
-    <select id="findConfigs" resultMap="ConfigResult">
+    <select id="listConfigs" resultMap="ConfigResult">
         SELECT *
         FROM config c
         <include refid="getConfigCondition"/>
@@ -105,7 +105,7 @@
         where id = #{id}
     </delete>
 
-    <resultMap id="ConfigInstanceResult" type="cd.blog.humbird.libra.entity.ConfigInstance">
+    <resultMap id="ConfigInstanceResult" type="cd.blog.humbird.libra.model.po.ConfigInstancePO">
         <id column="id" property="id"/>
         <result column="gmt_created" property="gmtCreated"/>
         <result column="modifier" property="modifier"/>
@@ -134,21 +134,14 @@
         </where>
     </sql>
 
-    <select id="findConfigInstanceById" resultMap="ConfigInstanceResult">
+    <select id="getConfigInstanceById" resultMap="ConfigInstanceResult">
         SELECT *
         FROM config_instance
         WHERE id = #{id}
         ORDER BY id
     </select>
 
-    <select id="findConfigInstanceByCreatorId" resultMap="ConfigInstanceResult">
-        SELECT *
-        FROM config_instance
-        WHERE creatorId = #{creatorId}
-        ORDER BY id
-    </select>
-
-    <select id="findConfigInstanceByConfigIdAndEnvId" resultMap="ConfigInstanceResult">
+    <select id="getConfigInstanceByConfigIdAndEnvId" resultMap="ConfigInstanceResult">
         SELECT *
         FROM config_instance
         WHERE 1=1
@@ -161,7 +154,14 @@
         ORDER BY id
     </select>
 
-    <select id="findConfigInstances" resultMap="ConfigInstanceResult">
+    <select id="listConfigInstancesByCreatorId" resultMap="ConfigInstanceResult">
+        SELECT *
+        FROM config_instance
+        WHERE creatorId = #{creatorId}
+        ORDER BY id
+    </select>
+
+    <select id="listConfigInstances" resultMap="ConfigInstanceResult">
         SELECT *
         FROM config_instance c
         <include refid="getConfigInstanceCondition"/>

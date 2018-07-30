@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.cli.callback;
 
-import cd.blog.humbird.libra.common.zk.ZKCli;
+import cd.blog.humbird.libra.common.zk.ZkCli;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * Created by david on 2018/7/27.
+ * @author david
+ * @since created by on 18/7/30 23:09
  */
 public class CallbackManager {
 
@@ -17,11 +18,11 @@ public class CallbackManager {
     private List<Callback> callbacks;
     private static volatile CallbackManager callbackManager;
 
-    private CallbackManager(ZKCli zkCli) {
+    private CallbackManager(ZkCli zkCli) {
         init(zkCli);
     }
 
-    public static CallbackManager instance(ZKCli zkCli) {
+    public static CallbackManager instance(ZkCli zkCli) {
         if (callbackManager == null) {
             synchronized (CallbackManager.class) {
                 if (callbackManager == null) {
@@ -48,7 +49,7 @@ public class CallbackManager {
         return null;
     }
 
-    private void init(ZKCli zkCli) {
+    private void init(ZkCli zkCli) {
         callbacks = Lists.newLinkedList();
         callbacks.add(new ClientConfigVersionCallback(zkCli));
         callbacks.add(new LibraClientStatusCallback(zkCli));

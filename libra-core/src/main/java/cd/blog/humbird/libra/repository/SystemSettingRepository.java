@@ -22,7 +22,7 @@ public class SystemSettingRepository {
     private CacheManager cacheManager;
 
     public String getVal(String key) {
-        return systemSettingMapper.findByKey(key);
+        return systemSettingMapper.getByKey(key);
     }
 
     public void update(String key, String value) {

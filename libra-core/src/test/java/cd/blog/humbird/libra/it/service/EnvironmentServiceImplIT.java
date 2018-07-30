@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.it.service;
 
 import cd.blog.humbird.libra.BaseIT;
-import cd.blog.humbird.libra.entity.Environment;
+import cd.blog.humbird.libra.model.po.EnvironmentPO;
 import cd.blog.humbird.libra.repository.RegisterRepository;
 import cd.blog.humbird.libra.service.EnvironmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class EnvironmentServiceImplIT extends BaseIT {
         int count = registerRepository.getRegisterEnvIds().size();
         long id = environmentService.insert("xb", "XB", "zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181", 0);
         System.out.println("====================================================");
-        List<Environment> environment_1 = environmentService.listAll();
+        List<EnvironmentPO> environment_PO_1 = environmentService.listAll();
         Set<Long> envIds_1 = registerRepository.getRegisterEnvIds();
         envIds_1.forEach(System.out::println);
         assertThat(envIds_1.size()).isEqualTo(count);
@@ -47,15 +47,15 @@ public class EnvironmentServiceImplIT extends BaseIT {
         int size = environmentService.listAll().size();
         long id = environmentService.insert("xb", "XB", "zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181", 0);
         System.out.println("====================================================");
-        List<Environment> environment_1 = environmentService.listAllAndRrefresh();
+        List<EnvironmentPO> environment_PO_1 = environmentService.listAllAndRefresh();
         Set<Long> envIds_1 = registerRepository.getRegisterEnvIds();
         assertThat(envIds_1.size()).isEqualTo(count + 1);
-        assertThat(environment_1.size()).isEqualTo(size + 1);
+        assertThat(environment_PO_1.size()).isEqualTo(size + 1);
         environmentService.delete(id);
         System.out.println("====================================================");
-        List<Environment> environment_2 = environmentService.listAll();
-        assertThat(environment_2.size()).isEqualTo(size);
-        List<Environment> environment_3 = environmentService.listAllAndRrefresh();
+        List<EnvironmentPO> environment_PO_2 = environmentService.listAll();
+        assertThat(environment_PO_2.size()).isEqualTo(size);
+        List<EnvironmentPO> environment_PO_3 = environmentService.listAllAndRefresh();
         Set<Long> envIds_3 = registerRepository.getRegisterEnvIds();
         assertThat(envIds_3.size()).isEqualTo(count);
         System.out.println("====================================================");
@@ -68,12 +68,12 @@ public class EnvironmentServiceImplIT extends BaseIT {
 
         String name = "xb";
         long id = environmentService.insert(name, "XB", "zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181", 0);
-        Environment env = environmentService.getByName(name);
+        EnvironmentPO env = environmentService.getByName(name);
         environmentService.update(env.getId(), env.getIps(), 1);
-        List<Environment> environment_1 = environmentService.listAllAndRrefresh();
+        List<EnvironmentPO> environment_PO_1 = environmentService.listAllAndRefresh();
         int count_2 = registerRepository.getRegisterEnvIds().size();
         assertThat(count_2).isEqualTo(count);
-        assertThat(environment_1.size()).isEqualTo(size + 1);
+        assertThat(environment_PO_1.size()).isEqualTo(size + 1);
         environmentService.delete(id);
     }
 }

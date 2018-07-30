@@ -18,7 +18,8 @@ import static cd.blog.humbird.libra.model.em.CacheEnum.TeamLocalCache;
 import static cd.blog.humbird.libra.model.em.CacheEnum.UserLocalCache;
 
 /**
- * Created by david on 2018/7/12.
+ * @author david
+ * @since created by on 2018/7/12 23:13
  */
 @Configuration
 public class CaffeineCacheConfig {

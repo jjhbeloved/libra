@@ -3,8 +3,8 @@ package cd.blog.humbird.libra.register;
 import cd.blog.humbird.libra.common.constant.LibraPath;
 import cd.blog.humbird.libra.common.constant.Parameter;
 import cd.blog.humbird.libra.common.util.EncodeUtils;
-import cd.blog.humbird.libra.common.util.ZKUtils;
-import cd.blog.humbird.libra.common.zk.ZKCli;
+import cd.blog.humbird.libra.common.util.ZkUtils;
+import cd.blog.humbird.libra.common.zk.ZkCli;
 import cd.blog.humbird.libra.exception.ZookeeperRegisterException;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
@@ -29,7 +29,7 @@ public class ZookeeperRegister implements Register {
     private String timestampNode = "TIMESTAMP";
 
     private CuratorFramework cli;
-    private ZKCli zkCli;
+    private ZkCli zkCli;
 
     public ZookeeperRegister(String servers) {
         this(servers, null);
@@ -38,8 +38,8 @@ public class ZookeeperRegister implements Register {
     public ZookeeperRegister(String servers, String namespace) {
         this.servers = servers;
         this.namespace = namespace;
-        this.cli = ZKUtils.createCuratorCli(servers, namespace);
-        this.zkCli = new ZKCli(this.cli);
+        this.cli = ZkUtils.createCuratorCli(servers, namespace);
+        this.zkCli = new ZkCli(this.cli);
     }
 
     @Override

@@ -1,11 +1,11 @@
 package cd.blog.humbird.libra.repository;
 
-import cd.blog.humbird.libra.entity.OpLog;
-import cd.blog.humbird.libra.entity.Team;
+import cd.blog.humbird.libra.model.po.OpLogPO;
+import cd.blog.humbird.libra.model.po.TeamPO;
 import cd.blog.humbird.libra.mapper.TeamMapper;
 import cd.blog.humbird.libra.model.em.OpLogTypeEnum;
-import cd.blog.humbird.libra.model.vo.User;
-import cd.blog.humbird.libra.util.UserUtil;
+import cd.blog.humbird.libra.model.domain.UserDO;
+import cd.blog.humbird.libra.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,26 +39,26 @@ public class TeamRepository {
     private OpLogRepository opLogRepository;
 
     @Cacheable(value = "teamLocalCache", key = "'id-' + #id", unless = "#result == null")
-    public Team findById(long id) {
-        return teamMapper.findById(id);
+    public TeamPO getById(long id) {
+        return teamMapper.getById(id);
     }
 
     @Cacheable(value = "teamLocalCache", key = "'name-' + #name", unless = "#result == null")
-    public Team findByName(String name) {
-        return teamMapper.findByName(name);
+    public TeamPO getByName(String name) {
+        return teamMapper.getByName(name);
     }
 
-    public long create(Team team) {
+    public long create(TeamPO teamPO) {
         try {
-            User u = UserUtil.getUser();
-            team.setCreator(u.getName());
-            team.setModifier(u.getName());
-            teamMapper.insert(team);
-            long id = team.getId();
+            UserDO u = UserUtils.getUser();
+            teamPO.setCreator(u.getName());
+            teamPO.setModifier(u.getName());
+            teamMapper.insert(teamPO);
+            long id = teamPO.getId();
             String content = String.format("创建业务团队[%s]",
-                    team.getName()
+                    teamPO.getName()
             );
-            opLogRepository.insert(new OpLog(OpLogTypeEnum.Team_Add.getValue(), u.getId(), content));
+            opLogRepository.insert(new OpLogPO(OpLogTypeEnum.Team_Add.getValue(), u.getId(), content));
             return id;
         } finally {
             Cache cache = cacheManager.getCache(TeamLocalCache.getCode());
@@ -66,45 +66,44 @@ public class TeamRepository {
         }
     }
 
-    public void update(Team team) {
-        long id = team.getId();
-        Team existsTeam = findById(id);
-        if (existsTeam == null) {
+    public void update(TeamPO prvTeamPO, TeamPO teamPO) {
+        if(prvTeamPO == null) {
             return;
         }
+        long id = teamPO.getId();
         try {
-            User u = UserUtil.getUser();
-            team.setModifier(u.getName());
-            teamMapper.update(team);
+            UserDO u = UserUtils.getUser();
+            teamPO.setModifier(u.getName());
+            teamMapper.update(teamPO);
             String content = String.format("编辑%s用户,[团队:%s]->[团队:%s]",
-                    existsTeam.getId(), existsTeam.getName(), team.getName()
+                    prvTeamPO.getId(), prvTeamPO.getName(), teamPO.getName()
             );
-            opLogRepository.insert(new OpLog(OpLogTypeEnum.Team_Edit.getValue(), u.getId(), content));
+            opLogRepository.insert(new OpLogPO(OpLogTypeEnum.Team_Edit.getValue(), u.getId(), content));
         } finally {
             Cache cache = cacheManager.getCache(TeamLocalCache.getCode());
             cache.evict("lists");
             cache.evict("id-" + id);
-            cache.evict("name-" + existsTeam.getName());
+            cache.evict("name-" + prvTeamPO.getName());
         }
     }
 
-    public void delete(long id) {
-        Team team = findById(id);
-        if (team == null) {
+    public void delete(TeamPO teamPO) {
+        if (teamPO == null) {
             return;
         }
+        long id = teamPO.getId();
         try {
-            cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
+            UserDO u = UserUtils.getUser();
             teamMapper.delete(id);
             String content = String.format("删除%s团队",
-                    team.getName()
+                    teamPO.getName()
             );
-            opLogRepository.insert(new OpLog(OpLogTypeEnum.Team_Delete.getValue(), u.getId(), content));
+            opLogRepository.insert(new OpLogPO(OpLogTypeEnum.Team_Delete.getValue(), u.getId(), content));
         } finally {
             Cache cache = cacheManager.getCache(TeamLocalCache.getCode());
             cache.evict("lists");
             cache.evict("id-" + id);
-            cache.evict("name-" + team.getName());
+            cache.evict("name-" + teamPO.getName());
         }
     }
 }

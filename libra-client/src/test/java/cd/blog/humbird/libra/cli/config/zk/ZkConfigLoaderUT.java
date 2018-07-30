@@ -2,8 +2,8 @@ package cd.blog.humbird.libra.cli.config.zk;
 
 import cd.blog.humbird.libra.cli.BaseUT;
 import cd.blog.humbird.libra.common.util.JsonUtils;
-import cd.blog.humbird.libra.common.util.ZKUtils;
-import cd.blog.humbird.libra.common.zk.ZKCli;
+import cd.blog.humbird.libra.common.util.ZkUtils;
+import cd.blog.humbird.libra.common.zk.ZkCli;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEventType;
 import org.apache.zookeeper.WatchedEvent;
@@ -14,12 +14,12 @@ import org.testng.annotations.Test;
  * @author david
  * @since created by on 18/7/25 03:12
  */
-public class ZKConfigLoaderUT extends BaseUT {
+public class ZkConfigLoaderUT extends BaseUT {
 
     @Test
     public void watch() throws Exception {
-        CuratorFramework client = ZKUtils.createCuratorCli("zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181");
-        ZKCli zkCli = new ZKCli(client);
+        CuratorFramework client = ZkUtils.createCuratorCli("zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181");
+        ZkCli zkCli = new ZkCli(client);
         client.getCuratorListenable().addListener((cli, event) -> {
             if (event.getType() == CuratorEventType.WATCHED) {
                 System.out.println(event.toString());
@@ -35,8 +35,8 @@ public class ZKConfigLoaderUT extends BaseUT {
 
     @Test
     public void trigger() throws Exception {
-        CuratorFramework client = ZKUtils.createCuratorCli("zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181");
-        ZKCli zkCli = new ZKCli(client);
+        CuratorFramework client = ZkUtils.createCuratorCli("zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181");
+        ZkCli zkCli = new ZkCli(client);
         client.getCuratorListenable().addListener((cli, event) -> {
             if (event.getType() == CuratorEventType.WATCHED) {
                 System.out.println(event.toString());

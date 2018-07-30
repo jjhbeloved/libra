@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.mapper;
 
-import cd.blog.humbird.libra.entity.Environment;
+import cd.blog.humbird.libra.model.po.EnvironmentPO;
 
 import java.util.List;
 
@@ -9,15 +9,15 @@ import java.util.List;
  */
 public interface EnvironmentMapper {
 
-    List<Environment> findAll();
+    List<EnvironmentPO> findAll();
 
-    Environment findById(long id);
+    EnvironmentPO findById(long id);
 
-    Environment findByName(String name);
+    EnvironmentPO findByName(String name);
 
-    void insert(Environment environment);
+    void insert(EnvironmentPO environmentPO);
 
-    void update(Environment environment);
+    void update(EnvironmentPO environmentPO);
 
     void delete(long id);
 }

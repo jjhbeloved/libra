@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.it.mapper;
 
 import cd.blog.humbird.libra.BaseIT;
-import cd.blog.humbird.libra.entity.Environment;
+import cd.blog.humbird.libra.model.po.EnvironmentPO;
 import cd.blog.humbird.libra.mapper.EnvironmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by david on 2018/7/12.
  */
-public class EnvironmentRepositoryMapperIT extends BaseIT {
+public class EnvironmentMapperIT extends BaseIT {
 
     @Autowired
     EnvironmentMapper mapper;
@@ -22,16 +22,16 @@ public class EnvironmentRepositoryMapperIT extends BaseIT {
 
     @Test
     public void db() {
-        Environment environment = new Environment();
-        environment.setIps(url);
-        environment.setLabel("dev");
-        environment.setName("DEV");
-        environment.setStatus(0);
-        environment.setCreator("david");
-        environment.setModifier("david");
-        mapper.insert(environment);
-        long id = environment.getId();
-        Environment rs = mapper.findByName(environment.getName());
+        EnvironmentPO environmentPO = new EnvironmentPO();
+        environmentPO.setIps(url);
+        environmentPO.setLabel("dev");
+        environmentPO.setName("DEV");
+        environmentPO.setStatus(0);
+        environmentPO.setCreator("david");
+        environmentPO.setModifier("david");
+        mapper.insert(environmentPO);
+        long id = environmentPO.getId();
+        EnvironmentPO rs = mapper.findByName(environmentPO.getName());
         rs.setName("xv");
         mapper.update(rs);
         assertThat(mapper.findById(id).getName()).isEqualTo("xv");

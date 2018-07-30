@@ -1,9 +1,10 @@
-package cd.blog.humbird.libra.entity;
+package cd.blog.humbird.libra.model.po;
 
 /**
- * Created by david on 2018/7/19.
+ * @author david
+ * @since created by on 2018/7/19 23:29
  */
-public class ConfigInstance extends BaseEntity {
+public class ConfigInstancePO extends BasePO {
 
     private long configId;
 

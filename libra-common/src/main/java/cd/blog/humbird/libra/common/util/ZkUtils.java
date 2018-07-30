@@ -10,7 +10,7 @@ import org.apache.curator.retry.RetryNTimes;
  * @author david
  * @since created by on 18/7/25 01:12
  */
-public class ZKUtils {
+public class ZkUtils {
     public static CuratorFramework createCuratorCli(String servers) {
         return createCuratorCli(servers, null);
     }

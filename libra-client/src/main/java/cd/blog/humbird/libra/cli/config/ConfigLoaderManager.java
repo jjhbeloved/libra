@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.cli.config;
 
-import cd.blog.humbird.libra.cli.config.zk.ZKConfigLoader;
+import cd.blog.humbird.libra.cli.config.zk.ZkConfigLoader;
 import cd.blog.humbird.libra.cli.model.ConfigValue;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * Created by david on 2018/7/26.
+ * @author david
+ * @since created by on 18/7/30 23:09
  */
 public class ConfigLoaderManager {
 
@@ -79,7 +80,7 @@ public class ConfigLoaderManager {
 
     private void init() {
         configLoaders = Lists.newLinkedList();
-        configLoaders.add(new ZKConfigLoader());
+        configLoaders.add(new ZkConfigLoader());
         for (ConfigLoader configLoader : configLoaders) {
             configLoader.init();
         }

@@ -10,7 +10,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class ConfigEvent {
 
     private String key;
-    // 如果value==null意味着删除
+    /**
+     * 如果value==null意味着删除
+     */
     private String value;
     private String version;
 

@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.mapper;
 
-import cd.blog.humbird.libra.entity.Team;
+import cd.blog.humbird.libra.model.po.TeamPO;
 
 import java.util.List;
 
@@ -9,17 +9,17 @@ import java.util.List;
  */
 public interface TeamMapper {
 
-    List<Team> findAll();
+    List<TeamPO> listAll();
 
-    List<Team> findTeams(String name);
+    List<TeamPO> listTeams(String name);
 
-    Team findById(long id);
+    TeamPO getById(long id);
 
-    Team findByName(String name);
+    TeamPO getByName(String name);
 
-    void insert(Team team);
+    void insert(TeamPO teamPO);
 
-    void update(Team team);
+    void update(TeamPO teamPO);
 
     void delete(long id);
 }

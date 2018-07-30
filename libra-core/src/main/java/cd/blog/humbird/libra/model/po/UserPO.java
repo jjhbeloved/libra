@@ -1,9 +1,9 @@
-package cd.blog.humbird.libra.entity;
+package cd.blog.humbird.libra.model.po;
 
 /**
  * Created by david on 2018/7/16.
  */
-public class User extends BaseEntity {
+public class UserPO extends BasePO {
 
     private String loginName;
 
@@ -13,11 +13,11 @@ public class User extends BaseEntity {
 
     private String email;
 
-    private int admin;
+    private Integer admin;
 
-    private int locked;
+    private Integer locked;
 
-    private int status;
+    private Integer status;
 
     public String getLoginName() {
         return loginName;
@@ -51,27 +51,27 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public int getAdmin() {
+    public Integer getAdmin() {
         return admin;
     }
 
-    public void setAdmin(int admin) {
+    public void setAdmin(Integer admin) {
         this.admin = admin;
     }
 
-    public int getLocked() {
+    public Integer getLocked() {
         return locked;
     }
 
-    public void setLocked(int locked) {
+    public void setLocked(Integer locked) {
         this.locked = locked;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

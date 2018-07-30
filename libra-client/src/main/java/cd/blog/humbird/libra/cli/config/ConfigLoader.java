@@ -3,7 +3,8 @@ package cd.blog.humbird.libra.cli.config;
 import cd.blog.humbird.libra.cli.model.ConfigValue;
 
 /**
- * Created by david on 2018/7/10.
+ * @author david
+ * @since created by on 18/7/30 23:09
  */
 public interface ConfigLoader {
 
@@ -16,6 +17,12 @@ public interface ConfigLoader {
      */
     void init();
 
+    /**
+     * 根据 key 获取配置环境下对应的信息
+     *
+     * @param key 键
+     * @return 值信息
+     */
     ConfigValue get(String key);
 
     /**

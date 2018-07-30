@@ -20,6 +20,7 @@ public class ClientEnv {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientEnv.class);
 
+    private static final String NONE_USE_CACHE = "false";
     private static Properties props = null;
     private static String appName = null;
     private static String appVersion = null;
@@ -28,6 +29,7 @@ public class ClientEnv {
     private static boolean readCache = true;
     private static int syncInterval = 1800000;
     private static long startTime = System.currentTimeMillis();
+    private static final Pattern PATTERN = Pattern.compile("/home/admin/(.*?)/.*");
 
     static {
         props = loadAppEnv();
@@ -42,7 +44,7 @@ public class ClientEnv {
         if (props != null) {
             String cache = props.getProperty("readCache");
             String interval = props.getProperty("syncInterval");
-            if (StringUtils.equalsIgnoreCase(cache, "false")) {
+            if (StringUtils.equalsIgnoreCase(cache, NONE_USE_CACHE)) {
                 readCache = false;
             }
             if (StringUtils.isNoneBlank(interval)) {
@@ -80,8 +82,7 @@ public class ClientEnv {
         // {{预留扩展}} 这里读基础环境的appenv, 在基础模块会自动生成对应项目的appenv
         // load from /home/admin/${projectName}/appenv
         if (props == null) {
-            Pattern pattern = Pattern.compile("/home/admin/(.*?)/.*");
-            Matcher matcher = pattern.matcher(path);
+            Matcher matcher = PATTERN.matcher(path);
             if (matcher.find()) {
                 String projectName = matcher.group(1);
                 String p = "/home/admin/" + projectName + "/appenv";

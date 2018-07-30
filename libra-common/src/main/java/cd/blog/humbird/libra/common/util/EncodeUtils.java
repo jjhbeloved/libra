@@ -3,7 +3,8 @@ package cd.blog.humbird.libra.common.util;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Created by david on 2018/7/11.
+ * @author david
+ * @since created by on 2018/7/11 23:13
  */
 public class EncodeUtils {
 

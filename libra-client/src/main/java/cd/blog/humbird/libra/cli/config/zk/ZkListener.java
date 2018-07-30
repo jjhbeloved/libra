@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.cli.config.zk;
 
-import cd.blog.humbird.libra.common.util.ZKUtils;
+import cd.blog.humbird.libra.common.util.ZkUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEvent;
@@ -18,13 +18,13 @@ import static org.apache.zookeeper.Watcher.Event.EventType;
  * @author david
  * @since created by on 18/7/25 01:26
  */
-public class ZKListener implements CuratorListener {
+public class ZkListener implements CuratorListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ZKListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZkListener.class);
 
-    private ZKConfigLoader configLoader;
+    private ZkConfigLoader configLoader;
 
-    ZKListener(ZKConfigLoader configLoader) {
+    ZkListener(ZkConfigLoader configLoader) {
         this.configLoader = configLoader;
     }
 
@@ -44,7 +44,7 @@ public class ZKListener implements CuratorListener {
 
     private void process(WatchedEvent watchedEvent) {
         String path = watchedEvent.getPath();
-        String key = ZKUtils.getConfigKey(path);
+        String key = ZkUtils.getConfigKey(path);
         if (key == null) {
             LOGGER.info("failed to get config key, path: {}", path);
             return;
@@ -64,7 +64,7 @@ public class ZKListener implements CuratorListener {
      * @param key
      */
     private void configChanged(String key) {
-        ZKValue zkValue = configLoader.getZKValue(key);
+        ZkValue zkValue = configLoader.getZKValue(key);
         if (zkValue == null || StringUtils.isBlank(zkValue.getVal())) {
             LOGGER.info("ignored config change, key:{} is null", key);
             return;

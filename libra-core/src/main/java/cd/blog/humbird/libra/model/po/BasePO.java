@@ -1,4 +1,4 @@
-package cd.blog.humbird.libra.entity;
+package cd.blog.humbird.libra.model.po;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -7,13 +7,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by david on 2018/7/11.
+ * @author david
+ * @since created by on 18/7/30 23:09
  */
-public abstract class BaseEntity implements Serializable {
+public abstract class BasePO implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
-    private long id;
+    private Long id;
 
     private String creator;
 
@@ -23,13 +24,13 @@ public abstract class BaseEntity implements Serializable {
 
     private Date gmtModified;
 
-    private int version;
+    private Integer version;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -65,11 +66,11 @@ public abstract class BaseEntity implements Serializable {
         this.gmtModified = gmtModified;
     }
 
-    public int getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 

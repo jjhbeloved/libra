@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Created by david on 2018/7/11.
+ * @author david
+ * @since created by on 2018/7/11 23:13
  */
 @Configuration
 @MapperScan("cd.blog.humbird.libra.mapper")
@@ -54,7 +55,8 @@ public class DbConfig {
         druidDataSource.setPassword(password);
         druidDataSource.setMaxActive(60);
         druidDataSource.setInitialSize(1);
-        druidDataSource.setMaxWait(60000);//60s
+        // 60s
+        druidDataSource.setMaxWait(60000);
         druidDataSource.setMinIdle(1);
         druidDataSource.setTimeBetweenEvictionRunsMillis(3000);
         druidDataSource.setMinEvictableIdleTimeMillis(300000);
@@ -70,7 +72,8 @@ public class DbConfig {
         druidDataSource.setConnectProperties(properties);
 
         StatFilter statFilter = new StatFilter();
-        statFilter.setSlowSqlMillis(10000);//10s
+        // 10s
+        statFilter.setSlowSqlMillis(10000);
         statFilter.setMergeSql(true);
         statFilter.setLogSlowSql(true);
 

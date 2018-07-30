@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.repository;
 
-import cd.blog.humbird.libra.entity.Environment;
+import cd.blog.humbird.libra.model.po.EnvironmentPO;
 import cd.blog.humbird.libra.register.Register;
 import cd.blog.humbird.libra.register.RegisterFactory;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class RegisterRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RegisterRepository.class);
 
-    private static final ConcurrentMap<Long, Register> registers = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Long, Register> REGISTERS = new ConcurrentHashMap<>();
 
     @Resource(name = "zookeeperRegisterFactory")
     private RegisterFactory registerFactory;
@@ -33,44 +33,44 @@ public class RegisterRepository {
     /**
      * 根据环境创建注册器
      *
-     * @param environment
+     * @param environmentPO
      * @return
      */
-    public Register createRegister(Environment environment) {
-        if (environment != null) {
+    public Register createRegister(EnvironmentPO environmentPO) {
+        if (environmentPO != null) {
             try {
-                Register register = registerFactory.createRegister(environment);
-                return setRegister(environment.getId(), register);
+                Register register = registerFactory.createRegister(environmentPO);
+                return setRegister(environmentPO.getId(), register);
             } catch (Exception e) {
                 LOGGER.error("Create config register service[env={},ips={}] failed.exception:{}",
-                        environment.getLabel(), environment.getIps(), e.getMessage());
+                        environmentPO.getLabel(), environmentPO.getIps(), e.getMessage());
             }
         }
         return null;
     }
 
     public Register getRegister(long envId) {
-        return registers.get(envId);
+        return REGISTERS.get(envId);
     }
 
     /**
      * 获取所有的注册环境信息
      *
-     * @return
+     * @return 环境信息列表
      */
     public Set<Long> getRegisterEnvIds() {
-        return registers.keySet();
+        return REGISTERS.keySet();
     }
 
     public void removeRegister(long envId) {
-        Register register = registers.remove(envId);
+        Register register = REGISTERS.remove(envId);
         if (register != null) {
             destoryRegister(register);
         }
     }
 
     private Register setRegister(long envId, Register register) {
-        Register oldRegister = registers.putIfAbsent(envId, register);
+        Register oldRegister = REGISTERS.putIfAbsent(envId, register);
         if (oldRegister == null) {
             return register;
         } else {

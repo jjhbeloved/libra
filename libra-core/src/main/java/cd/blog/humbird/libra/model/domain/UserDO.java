@@ -1,9 +1,11 @@
-package cd.blog.humbird.libra.model.vo;
+package cd.blog.humbird.libra.model.domain;
+
+import cd.blog.humbird.libra.model.vo.BaseVO;
 
 /**
  * Created by david on 2018/7/13.
  */
-public class User extends BaseVO {
+public class UserDO extends BaseVO {
 
     private long id;
     private String name;

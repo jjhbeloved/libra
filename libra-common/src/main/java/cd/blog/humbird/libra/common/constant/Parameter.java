@@ -1,7 +1,8 @@
 package cd.blog.humbird.libra.common.constant;
 
 /**
- * Created by david on 2018/7/30.
+ * @author david
+ * @since created by on 2018/7/30 23:13
  */
 public class Parameter {
 
@@ -18,9 +19,9 @@ public class Parameter {
      */
     public static final String VERSION_FORMAT = "%s-%s";
     /**
-     * LOCAL APP VERSION
+     * LOCAL APP VERSION FIXME 读取本地应用版本
      */
-    public static final String LOCAL_VERSION = "9.9.9-RELEASE"; // FIXME 读取本地应用版本
+    public static final String LOCAL_VERSION = "9.9.9-RELEASE";
     /**
      * 部署环境 dev/test/perf/pre/prod
      */
@@ -37,6 +38,9 @@ public class Parameter {
      * 默认的zk server
      */
     public static final String DEFAULT_ZKSERVER = "localhost:2181";
+
+
+
     /**
      * 数据编码
      */
@@ -49,4 +53,14 @@ public class Parameter {
      * Default placeholder suffix: "}"
      */
     public static final String DEFAULT_PLACEHOLDER_SUFFIX = "}";
+
+
+    /**
+     * 默认第1页
+     */
+    public static final int DEFAULT_PAGE_NUM = 1;
+    /**
+     * 每页面10条
+     */
+    public static final int DEFAULT_PAGE_SIZE = 10;
 }

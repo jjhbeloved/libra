@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.register;
 
-import cd.blog.humbird.libra.entity.Environment;
+import cd.blog.humbird.libra.model.po.EnvironmentPO;
 import cd.blog.humbird.libra.exception.RegisterException;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 public class ZookeeperRegisterFactory implements RegisterFactory {
 
     @Override
-    public Register createRegister(Environment environment) throws Exception {
-        String servers = environment.getIps();
+    public Register createRegister(EnvironmentPO environmentPO) throws Exception {
+        String servers = environmentPO.getIps();
         Register register = new ZookeeperRegister(servers);
         try {
             register.init();

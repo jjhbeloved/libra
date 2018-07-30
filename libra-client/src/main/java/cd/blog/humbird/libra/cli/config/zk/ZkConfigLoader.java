@@ -10,8 +10,8 @@ import cd.blog.humbird.libra.cli.config.ConfigLoader;
 import cd.blog.humbird.libra.cli.model.ConfigEvent;
 import cd.blog.humbird.libra.cli.model.ConfigValue;
 import cd.blog.humbird.libra.common.constant.Parameter;
-import cd.blog.humbird.libra.common.util.ZKUtils;
-import cd.blog.humbird.libra.common.zk.ZKCli;
+import cd.blog.humbird.libra.common.util.ZkUtils;
+import cd.blog.humbird.libra.common.zk.ZkCli;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorListener;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
@@ -27,28 +27,28 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author david
  * @since created by on 18/7/25 01:18
  */
-public class ZKConfigLoader extends AbstractConfigLoader {
+public class ZkConfigLoader extends AbstractConfigLoader {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ZKConfigLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZkConfigLoader.class);
     private AtomicBoolean closed = new AtomicBoolean(false);
     private String servers;
     private String namespace;
     private CuratorListener listener;
     private CuratorFramework cli;
-    private ZKCli zkCli;
+    private ZkCli zkCli;
     private CallbackManager callbackManager;
     private Callback clientConfigCallback;
     private Callback clientStatusCallback;
 
-    public ZKConfigLoader() {
+    public ZkConfigLoader() {
         this(null);
     }
 
-    public ZKConfigLoader(String servers) {
+    public ZkConfigLoader(String servers) {
         this(servers, null);
     }
 
-    public ZKConfigLoader(String servers, String namespace) {
+    public ZkConfigLoader(String servers, String namespace) {
         this.servers = Optional.ofNullable(servers)
                 .orElse(System.getProperty(ConfigLoader.KEY_ZOOKEEPER_ADDRESS, ClientEnv.getZkserver()));
         this.namespace = namespace;
@@ -56,9 +56,9 @@ public class ZKConfigLoader extends AbstractConfigLoader {
 
     @Override
     public void init() {
-        this.listener = new ZKListener(this);
+        this.listener = new ZkListener(this);
         this.cli = createCli();
-        this.zkCli = new ZKCli(cli);
+        this.zkCli = new ZkCli(cli);
         this.callbackManager = CallbackManager.instance(zkCli);
         clientConfigCallback = callbackManager.getClassLoader(ClientConfigVersionCallback.class);
         clientStatusCallback = callbackManager.getClassLoader(LibraClientStatusCallback.class);
@@ -77,7 +77,7 @@ public class ZKConfigLoader extends AbstractConfigLoader {
         clientConfigCallback.call(event);
     }
 
-    public void changed(String key, ZKValue zkValue) {
+    public void changed(String key, ZkValue zkValue) {
         refresh(new ConfigEvent(key, zkValue.getVal(), zkValue.getVersion()));
     }
 
@@ -90,12 +90,12 @@ public class ZKConfigLoader extends AbstractConfigLoader {
         return getZKValue(key);
     }
 
-    ZKValue getZKValue(String key) {
-        return getValue(ZKUtils.getConfigPath(key));
+    ZkValue getZKValue(String key) {
+        return getValue(ZkUtils.getConfigPath(key));
     }
 
     private CuratorFramework createCli() {
-        CuratorFramework cli = ZKUtils.createCuratorCli(servers);
+        CuratorFramework cli = ZkUtils.createCuratorCli(servers);
         cli.getConnectionStateListenable().addListener((client, newState) -> {
             LOGGER.info("libra zookeeper state: " + newState);
             if (newState == ConnectionState.RECONNECTED) {
@@ -128,12 +128,12 @@ public class ZKConfigLoader extends AbstractConfigLoader {
         }
     }
 
-    private ZKValue getValue(String path) {
-        ZKValue value = null;
+    private ZkValue getValue(String path) {
+        ZkValue value = null;
         Stat stat = new Stat();
         String val = this.zkCli.getWatched(path, stat);
         if (val != null) {
-            value = new ZKValue();
+            value = new ZkValue();
             value.setVal(val);
             value.setVersion(String.format(Parameter.VERSION_FORMAT, stat.getMtime(), stat.getVersion()));
         } else {

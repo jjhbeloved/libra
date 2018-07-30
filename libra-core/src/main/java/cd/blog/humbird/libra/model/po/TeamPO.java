@@ -1,9 +1,9 @@
-package cd.blog.humbird.libra.entity;
+package cd.blog.humbird.libra.model.po;
 
 /**
  * Created by david on 2018/7/18.
  */
-public class Team extends BaseEntity {
+public class TeamPO extends BasePO {
 
     private String name;
 

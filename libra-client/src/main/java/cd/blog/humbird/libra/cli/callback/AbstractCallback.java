@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.cli.callback;
 
-import cd.blog.humbird.libra.common.zk.ZKCli;
+import cd.blog.humbird.libra.common.zk.ZkCli;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +16,9 @@ public abstract class AbstractCallback implements Callback {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCallback.class);
     protected ConcurrentHashMap<String, String> ephemeralNodes = new ConcurrentHashMap<>();
-    protected ZKCli zkCli;
+    protected ZkCli zkCli;
 
-    public AbstractCallback(ZKCli zkCli) {
+    public AbstractCallback(ZkCli zkCli) {
         this.zkCli = zkCli;
     }
 

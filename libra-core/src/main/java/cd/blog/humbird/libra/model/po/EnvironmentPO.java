@@ -1,14 +1,17 @@
-package cd.blog.humbird.libra.entity;
+package cd.blog.humbird.libra.model.po;
 
 /**
- * Created by david on 2018/7/11.
+ * @author david
+ * @since created by on 2018/7/11 00:36
  */
-public class Environment extends BaseEntity {
+public class EnvironmentPO extends BasePO {
 
     private String name;
     private String label;
     private String ips;
-    // 0启动/1停止
+    /**
+     * 0启动/1停止
+     */
     private int status;
 
     public String getName() {

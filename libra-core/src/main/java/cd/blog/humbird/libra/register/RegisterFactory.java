@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.register;
 
-import cd.blog.humbird.libra.entity.Environment;
+import cd.blog.humbird.libra.model.po.EnvironmentPO;
 
 /**
  * @author david
@@ -8,6 +8,6 @@ import cd.blog.humbird.libra.entity.Environment;
  */
 public interface RegisterFactory {
 
-    Register createRegister(Environment environment) throws Exception;
+    Register createRegister(EnvironmentPO environmentPO) throws Exception;
 
 }

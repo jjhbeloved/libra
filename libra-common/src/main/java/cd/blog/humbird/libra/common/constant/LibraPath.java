@@ -1,7 +1,8 @@
 package cd.blog.humbird.libra.common.constant;
 
 /**
- * Created by david on 2018/7/30.
+ * @author david
+ * @since created by on 2018/7/30 23:12
  */
 public class LibraPath {
 

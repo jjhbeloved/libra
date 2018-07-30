@@ -6,7 +6,7 @@ import cd.blog.humbird.libra.cli.model.ConfigEvent;
 import cd.blog.humbird.libra.common.constant.LibraPath;
 import cd.blog.humbird.libra.common.util.JsonUtils;
 import cd.blog.humbird.libra.common.util.SystemUtils;
-import cd.blog.humbird.libra.common.zk.ZKCli;
+import cd.blog.humbird.libra.common.zk.ZkCli;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +17,12 @@ import org.slf4j.LoggerFactory;
 public class LibraClientStatusCallback extends AbstractCallback {
 
     private static final Logger logger = LoggerFactory.getLogger(LibraClientStatusCallback.class);
-    // /LIBRA/CALLBACK/status/${appName}/${ip}-${pid}
+    /**
+     * 应用状态地址: /LIBRA/CALLBACK/status/${appName}/${ip}-${pid}
+     */
     private static final String STATUS_PATH = LibraPath.CALLBACK_STATUS_PATH_PREFIX + "/%s/%s-%s";
 
-    public LibraClientStatusCallback(ZKCli zkCli) {
+    public LibraClientStatusCallback(ZkCli zkCli) {
         super(zkCli);
     }
 

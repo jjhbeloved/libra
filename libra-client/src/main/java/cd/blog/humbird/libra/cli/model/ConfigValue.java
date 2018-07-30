@@ -6,7 +6,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 /**
- * Created by david on 2018/7/26.
+ * @author david
+ * @since created by on 18/7/30 23:09
  */
 public class ConfigValue implements Serializable {
 

@@ -15,13 +15,13 @@ import java.util.List;
  * @author david
  * @since created by on 18/7/25 00:46
  */
-public class ZKCli {
+public class ZkCli {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ZKCli.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZkCli.class);
 
     private CuratorFramework client;
 
-    public ZKCli(CuratorFramework client) {
+    public ZkCli(CuratorFramework client) {
         this.client = client;
     }
 

@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.mapper;
 
-import cd.blog.humbird.libra.entity.User;
+import cd.blog.humbird.libra.model.po.UserPO;
 import cd.blog.humbird.libra.model.vo.UserCriteria;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,19 +11,19 @@ import java.util.List;
  */
 public interface UserMapper {
 
-    List<User> findAll();
+    List<UserPO> findAll();
 
-    List<User> findUsers(@Param("criteria") UserCriteria criteria);
+    List<UserPO> findUsers(@Param("criteria") UserCriteria criteria);
 
-    User findById(long id);
+    UserPO findById(long id);
 
-    User findByName(String name);
+    UserPO findByName(String name);
 
-    List<User> findByNameOrLoginNameLike(@Param("name") String name, @Param("includeAdmin") boolean includeAdmin);
+    List<UserPO> findByNameOrLoginNameLike(@Param("name") String name, @Param("includeAdmin") boolean includeAdmin);
 
-    void insert(User user);
+    void insert(UserPO userPO);
 
-    void update(User user);
+    void update(UserPO userPO);
 
     void delete(long id);
 }

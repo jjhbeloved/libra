@@ -3,20 +3,24 @@ package cd.blog.humbird.libra.cli.callback;
 import cd.blog.humbird.libra.cli.ClientEnv;
 import cd.blog.humbird.libra.cli.model.ConfigEvent;
 import cd.blog.humbird.libra.common.constant.LibraPath;
-import cd.blog.humbird.libra.common.zk.ZKCli;
+import cd.blog.humbird.libra.common.zk.ZkCli;
 
 /**
- * Created by david on 2018/7/27.
+ * @author david
+ * @since created by on 18/7/30 23:09
  */
 public class ClientConfigVersionCallback extends AbstractCallback {
 
-    // /LIBRA/CALLBACK/config/${appName}/${key}
+    /**
+     * 对应的地址格式: /LIBRA/CALLBACK/config/${appName}/${key}
+     */
     private static final String CONFIG_KEYS_PATH = LibraPath.CALLBACK_CONFIG_KEYS_PATH_PREFIX + "/%s/%s";
 
-    public ClientConfigVersionCallback(ZKCli zkCli) {
+    public ClientConfigVersionCallback(ZkCli zkCli) {
         super(zkCli);
     }
 
+    @Override
     public void call(ConfigEvent event) {
         String key = event.getKey();
         String version = event.getVersion();
