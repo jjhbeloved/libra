@@ -14,7 +14,7 @@ public abstract class AbstractConfigLoader implements ConfigLoader {
     }
 
     @Override
-    public void removeConfigListener(ConfigListener configListener) {
+    public void removeConfigListener() {
         configListener = null;
     }
 

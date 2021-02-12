@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.mapper;
 
-import cd.blog.humbird.libra.entity.Config;
-import cd.blog.humbird.libra.entity.ConfigInstance;
+import cd.blog.humbird.libra.model.po.ConfigPO;
+import cd.blog.humbird.libra.model.po.ConfigInstancePO;
 import cd.blog.humbird.libra.model.vo.ConfigCriteria;
 import cd.blog.humbird.libra.model.vo.ConfigInstanceCriteria;
 import org.apache.ibatis.annotations.Param;
@@ -9,43 +9,44 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * Created by david on 2018/7/19.
+ * @author david
+ * @since created by on 2018/7/19 23:29
  */
 public interface ConfigMapper {
 
-    Config findConfigById(long id);
+	ConfigPO getConfigById(long id);
 
-    Config findConfigByKeyAndProjectId(@Param("key") String key, @Param("projectId") long projectId);
+	ConfigPO getConfigByKeyAndProjectId(@Param("key") String key, @Param("projectId") long projectId);
 
-    List<Config> findConfigByKey(String key);
+	List<ConfigPO> listConfigsByKey(String key);
 
-    List<Config> findConfigByKeyParttern(String key);
+	List<ConfigPO> listConfigsByKeyParttern(String key);
 
-    List<Config> findConfigByCreatorId(long creatorId);
+	List<ConfigPO> listConfigsByCreatorId(long creatorId);
 
-    List<Config> findConfigByProjectId(long projectId);
+	List<ConfigPO> listConfigsByProjectId(long projectId);
 
-    List<Config> findConfigs(@Param("criteria") ConfigCriteria criteria);
+	List<ConfigPO> listConfigs(@Param("criteria") ConfigCriteria criteria);
 
-    void insertConfig(Config config);
+	void insertConfig(ConfigPO configPO);
 
-    void updateConfig(Config config);
+	void updateConfig(ConfigPO configPO);
 
-    void deleteConfig(long id);
+	void deleteConfig(long id);
 
-    // ################ config instance #################
+	// ################ config instance #################
 
-    ConfigInstance findConfigInstanceById(long id);
+	ConfigInstancePO getConfigInstanceById(long id);
 
-    List<ConfigInstance> findConfigInstanceByCreatorId(long creatorId);
+	ConfigInstancePO getConfigInstanceByConfigIdAndEnvId(@Param("configId") long configId, @Param("envId") long envId);
 
-    ConfigInstance findConfigInstanceByConfigIdAndEnvId(@Param("configId") long configId, @Param("envId") long envId);
+	List<ConfigInstancePO> listConfigInstancesByCreatorId(long creatorId);
 
-    List<ConfigInstance> findConfigInstances(@Param("criteria") ConfigInstanceCriteria criteria);
+	List<ConfigInstancePO> listConfigInstances(@Param("criteria") ConfigInstanceCriteria criteria);
 
-    void insertConfigInstance(ConfigInstance configInstance);
+	void insertConfigInstance(ConfigInstancePO configInstancePO);
 
-    void updateConfigInstance(ConfigInstance configInstance);
+	void updateConfigInstance(ConfigInstancePO configInstancePO);
 
-    void deleteConfigInstance(long id);
+	void deleteConfigInstance(long id);
 }

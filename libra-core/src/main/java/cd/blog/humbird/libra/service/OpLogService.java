@@ -1,24 +1,20 @@
 package cd.blog.humbird.libra.service;
 
-import cd.blog.humbird.libra.entity.OpLog;
+import cd.blog.humbird.libra.model.po.OpLogPO;
 import cd.blog.humbird.libra.model.vo.OpLogCriteria;
-import cd.blog.humbird.libra.repository.OpLogRepository;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
- * Created by david on 2018/7/18.
+ * @author david
+ * @since created by on 18/7/31 00:13
  */
-@Service
-public class OpLogService {
+public interface OpLogService {
 
-    @Autowired
-    private OpLogRepository logRepository;
-
-    public PageInfo<OpLog> findLogs(OpLogCriteria log, int pageNum, int pageSize) {
-        return logRepository.getLogs(log, pageNum, pageSize);
-    }
+	/**
+	 * @param log      条件对象
+	 * @param pageNum  第n页
+	 * @param pageSize 每页面n条
+	 * @return
+	 */
+	PageInfo<OpLogPO> listLogs(OpLogCriteria log, Integer pageNum, Integer pageSize);
 }

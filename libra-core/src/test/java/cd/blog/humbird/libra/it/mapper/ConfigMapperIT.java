@@ -1,8 +1,8 @@
 package cd.blog.humbird.libra.it.mapper;
 
 import cd.blog.humbird.libra.BaseIT;
-import cd.blog.humbird.libra.entity.Config;
-import cd.blog.humbird.libra.entity.ConfigInstance;
+import cd.blog.humbird.libra.model.po.ConfigPO;
+import cd.blog.humbird.libra.model.po.ConfigInstancePO;
 import cd.blog.humbird.libra.mapper.ConfigMapper;
 import cd.blog.humbird.libra.model.vo.ConfigCriteria;
 import cd.blog.humbird.libra.model.vo.ConfigInstanceCriteria;
@@ -21,41 +21,41 @@ public class ConfigMapperIT extends BaseIT {
 
     @Test
     public void t1() {
-        Config config = new Config();
-        config.setModifier("david");
-        config.setCreator("david");
-        config.setCreatorId(123L);
-        config.setProjectId(123456L);
-        config.setPri(1);
-        config.setKey("xmmomx");
-        config.setDesc("xxxxxx");
-        config.setType(1);
-        configMapper.insertConfig(config);
-        long id = config.getId();
+        ConfigPO configPO = new ConfigPO();
+        configPO.setModifier("david");
+        configPO.setCreator("david");
+        configPO.setCreatorId(123L);
+        configPO.setProjectId(123456L);
+        configPO.setPri(1);
+        configPO.setKey("xmmomx");
+        configPO.setDesc("xxxxxx");
+        configPO.setType(1);
+        configMapper.insertConfig(configPO);
+        long id = configPO.getId();
         try {
-            assertThat(configMapper.findConfigById(id)).isNotNull();
-            assertThat(configMapper.findConfigByKey(config.getKey())).isNotEmpty();
-            assertThat(configMapper.findConfigByKeyAndProjectId("mo", config.getProjectId())).isNotNull();
-            assertThat(configMapper.findConfigByKeyParttern("mo")).isNotEmpty();
-            assertThat(configMapper.findConfigByCreatorId(config.getCreatorId())).isNotEmpty();
-            assertThat(configMapper.findConfigByProjectId(config.getProjectId())).isNotEmpty();
+            assertThat(configMapper.getConfigById(id)).isNotNull();
+            assertThat(configMapper.listConfigsByKey(configPO.getKey())).isNotEmpty();
+            assertThat(configMapper.getConfigByKeyAndProjectId("mo", configPO.getProjectId())).isNotNull();
+            assertThat(configMapper.listConfigsByKeyParttern("mo")).isNotEmpty();
+            assertThat(configMapper.listConfigsByCreatorId(configPO.getCreatorId())).isNotEmpty();
+            assertThat(configMapper.listConfigsByProjectId(configPO.getProjectId())).isNotEmpty();
 
             ConfigCriteria configCriteria = new ConfigCriteria();
             configCriteria.setKey("mo");
-            configCriteria.setProjectId(config.getProjectId());
-            assertThat(configMapper.findConfigs(configCriteria)).isNotEmpty();
+            configCriteria.setProjectId(configPO.getProjectId());
+            assertThat(configMapper.listConfigs(configCriteria)).isNotEmpty();
 
-            config.setDesc("xbx");
-            configMapper.updateConfig(config);
-            assertThat(configMapper.findConfigById(id).getDesc()).isEqualTo(config.getDesc());
+            configPO.setDesc("xbx");
+            configMapper.updateConfig(configPO);
+            assertThat(configMapper.getConfigById(id).getDesc()).isEqualTo(configPO.getDesc());
         } finally {
-            configMapper.deleteConfig(config.getId());
+            configMapper.deleteConfig(configPO.getId());
         }
     }
 
     @Test
     public void t2() {
-        ConfigInstance config = new ConfigInstance();
+        ConfigInstancePO config = new ConfigInstancePO();
         config.setModifier("david");
         config.setCreator("david");
         config.setCreatorId(123L);
@@ -68,19 +68,19 @@ public class ConfigMapperIT extends BaseIT {
         configMapper.insertConfigInstance(config);
         long id = config.getId();
         try {
-            assertThat(configMapper.findConfigInstanceById(id)).isNotNull();
-            assertThat(configMapper.findConfigInstanceByCreatorId(config.getCreatorId())).isNotEmpty();
-            assertThat(configMapper.findConfigInstanceByConfigIdAndEnvId(config.getConfigId(), config.getEnvId())).isNotNull();
+            assertThat(configMapper.getConfigInstanceById(id)).isNotNull();
+            assertThat(configMapper.listConfigInstancesByCreatorId(config.getCreatorId())).isNotEmpty();
+            assertThat(configMapper.getConfigInstanceByConfigIdAndEnvId(config.getConfigId(), config.getEnvId())).isNotNull();
 
             ConfigInstanceCriteria criteria = new ConfigInstanceCriteria();
             criteria.setConfigId(config.getConfigId());
             criteria.setEnvId(config.getEnvId());
             criteria.setCreatorId(config.getCreatorId());
-            assertThat(configMapper.findConfigInstances(criteria)).isNotEmpty();
+            assertThat(configMapper.listConfigInstances(criteria)).isNotEmpty();
 
             config.setDesc("xbx");
             configMapper.updateConfigInstance(config);
-            assertThat(configMapper.findConfigInstanceById(id).getDesc()).isEqualTo(config.getDesc());
+            assertThat(configMapper.getConfigInstanceById(id).getDesc()).isEqualTo(config.getDesc());
         } finally {
             configMapper.deleteConfigInstance(id);
         }

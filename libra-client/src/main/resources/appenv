@@ -1,0 +1,5 @@
+// 如果要自定义, 使用此文件, 如果是基础服务支撑, 删除此文件
+app_name=libra
+app_version=1.0.0-SNAPSHOT
+deploy_env=dev
+zk_server=zk1.dev.pajkdc.com:2181,zk2.dev.pajkdc.com:2181,zk3.dev.pajkdc.com:2181

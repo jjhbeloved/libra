@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cd.blog.humbird.libra.mapper.UserMapper">
+
+    <resultMap id="BaseResult" type="cd.blog.humbird.libra.model.po.UserPO">
+        <id column="id" property="id"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="modifier" property="modifier"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="version" property="version"/>
+        <result column="loginName" property="loginName"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="admin" property="admin"/>
+        <result column="locked" property="locked"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <sql id="getUserCondition">
+        <where>
+            <if test="criteria.name != null">
+                and u.name = #{criteria.name}
+            </if>
+            <if test="criteria.loginName != null">
+                and u.loginName = #{criteria.loginName}
+            </if>
+            <if test="criteria.admin != null">
+                and u.admin = #{criteria.admin}
+            </if>
+            <if test="criteria.locked != null">
+                and u.locked = #{criteria.locked}
+            </if>
+            <if test="criteria.status != null">
+                and u.status = #{criteria.status}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findAll" resultMap="BaseResult">
+        SELECT *
+        FROM user
+        ORDER BY id
+    </select>
+
+    <select id="findUsers" resultMap="BaseResult">
+        SELECT *
+        FROM user u
+        <include refid="getUserCondition"/>
+    </select>
+
+    <select id="findById" resultMap="BaseResult">
+        SELECT *
+        FROM user
+        WHERE id = #{id}
+        ORDER BY id
+    </select>
+
+    <select id="findByName" resultMap="BaseResult">
+        SELECT *
+        FROM user
+        WHERE loginName = #{name}
+    </select>
+
+    <select id="findByNameOrLoginNameLike" resultMap="BaseResult">
+        SELECT *
+        FROM user
+        WHERE (loginName LIKE CONCAT('%', #{name}, '%') OR name LIKE CONCAT('%',#{name}, '%'))
+        <if test="includeAdmin == true">
+            and admin = 1
+        </if>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into user (gmt_created, gmt_modified, creator, modifier, version,
+                loginName, password, name, email, admin, locked, status)
+        values (NOW(), NOW(), #{creator}, #{modifier}, #{version},
+                #{loginName}, #{password}, #{name}, #{email}, #{admin}, #{locked}, #{status})
+    </insert>
+
+    <update id="update">
+        update user
+        set name       = #{name},
+            password    = #{password},
+            email       = #{email},
+            admin       = #{admin},
+            locked       = #{locked},
+            status       = #{status},
+            version      = #{version} + 1,
+            modifier     = #{modifier},
+            gmt_modified = NOW()
+        where id = #{id} and version = #{version}
+    </update>
+
+    <delete id="delete">
+        delete from user
+        where id = #{id}
+    </delete>
+</mapper>

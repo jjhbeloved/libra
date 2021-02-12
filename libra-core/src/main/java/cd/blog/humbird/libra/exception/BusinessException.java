@@ -1,7 +1,8 @@
 package cd.blog.humbird.libra.exception;
 
 /**
- * Created by david on 2018/7/20.
+ * @author david
+ * @since created by on 18/7/30 23:09
  */
 public class BusinessException extends RuntimeException {
 

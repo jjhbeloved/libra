@@ -1,9 +1,7 @@
 package cd.blog.humbird.libra.model.vo;
 
-import cd.blog.humbird.libra.entity.BaseEntity;
 import org.apache.commons.lang3.time.DateUtils;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 

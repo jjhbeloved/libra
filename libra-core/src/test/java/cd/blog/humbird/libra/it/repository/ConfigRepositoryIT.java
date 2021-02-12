@@ -1,7 +1,7 @@
 package cd.blog.humbird.libra.it.repository;
 
 import cd.blog.humbird.libra.BaseIT;
-import cd.blog.humbird.libra.entity.Config;
+import cd.blog.humbird.libra.model.po.ConfigPO;
 import cd.blog.humbird.libra.repository.ConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -16,13 +16,13 @@ public class ConfigRepositoryIT extends BaseIT {
 
     @Test
     public void t1() {
-        Config config = new Config();
-        config.setProjectId(123456);
-        config.setKey("hello.world");
-        config.setPri(1);
-        config.setType(1);
-        config.setDesc("HelloWorld.");
-        long id = configRepository.createConfig(config);
+        ConfigPO configPO = new ConfigPO();
+        configPO.setProjectId(123456);
+        configPO.setKey("hello.world");
+        configPO.setPri(1);
+        configPO.setType(1);
+        configPO.setDesc("HelloWorld.");
+        long id = configRepository.createConfig(configPO);
         try {
             System.out.println(configRepository.findConfigById(id).toString());
         } finally {

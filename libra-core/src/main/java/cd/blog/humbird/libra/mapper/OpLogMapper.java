@@ -1,8 +1,7 @@
 package cd.blog.humbird.libra.mapper;
 
-import cd.blog.humbird.libra.entity.OpLog;
+import cd.blog.humbird.libra.model.po.OpLogPO;
 import cd.blog.humbird.libra.model.vo.OpLogCriteria;
-import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,9 +11,9 @@ import java.util.List;
  */
 public interface OpLogMapper {
 
-    void insert(OpLog opLog);
+    void insert(OpLogPO opLogPO);
 
-    List<OpLog> findLogs(@Param("criteria") OpLogCriteria criteria);
+    List<OpLogPO> findLogs(@Param("criteria") OpLogCriteria criteria);
 
     /**
      * 指定查询的keyName

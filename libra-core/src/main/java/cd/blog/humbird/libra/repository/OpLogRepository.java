@@ -1,6 +1,6 @@
 package cd.blog.humbird.libra.repository;
 
-import cd.blog.humbird.libra.entity.OpLog;
+import cd.blog.humbird.libra.model.po.OpLogPO;
 import cd.blog.humbird.libra.mapper.OpLogMapper;
 import cd.blog.humbird.libra.model.vo.OpLogCriteria;
 import com.github.pagehelper.PageHelper;
@@ -23,18 +23,18 @@ public class OpLogRepository {
     @Autowired
     private OpLogMapper opLogMapper;
 
-    public void insert(OpLog opLog) {
+    public void insert(OpLogPO opLogPO) {
         try {
-            opLogMapper.insert(opLog);
+            opLogMapper.insert(opLogPO);
         } catch (Exception e) {
-            LOGGER.warn("log operate info error.{}", opLog.toString());
+            LOGGER.warn("log operate info error.{}", opLogPO.toString());
         }
     }
 
-    public PageInfo<OpLog> getLogs(OpLogCriteria criteria, int pageNum, int pageSize) {
+    public PageInfo<OpLogPO> getLogs(OpLogCriteria criteria, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<OpLog> opLogs = opLogMapper.findLogs(criteria);
-        return new PageInfo<>(opLogs);
+        List<OpLogPO> opLogPOS = opLogMapper.findLogs(criteria);
+        return new PageInfo<>(opLogPOS);
     }
 
     public String getLogKey(long id, String keyName) {

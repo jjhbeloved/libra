@@ -1,7 +1,8 @@
 package cd.blog.humbird.libra.model.vo;
 
 /**
- * Created by david on 2018/7/20.
+ * @author david
+ * @since created by on 2018/7/20 23:29
  */
 public class ConfigInstanceCriteria extends BaseVO {
 

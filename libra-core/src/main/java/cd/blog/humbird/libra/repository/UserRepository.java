@@ -1,11 +1,12 @@
 package cd.blog.humbird.libra.repository;
 
-import cd.blog.humbird.libra.entity.OpLog;
-import cd.blog.humbird.libra.entity.User;
+import cd.blog.humbird.libra.model.domain.UserDO;
+import cd.blog.humbird.libra.model.po.OpLogPO;
+import cd.blog.humbird.libra.model.po.UserPO;
 import cd.blog.humbird.libra.mapper.UserMapper;
 import cd.blog.humbird.libra.model.em.OpLogTypeEnum;
 import cd.blog.humbird.libra.model.vo.UserCriteria;
-import cd.blog.humbird.libra.util.UserUtil;
+import cd.blog.humbird.libra.util.UserUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,38 +40,38 @@ public class UserRepository {
     @Resource(name = "localCacheManager")
     private CacheManager cacheManager;
 
-    public PageInfo<User> getUsers(UserCriteria user, int pageNum, int pageSize) {
+    public PageInfo<UserPO> getUsers(UserCriteria user, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<User> users = userMapper.findUsers(user);
-        return new PageInfo<>(users);
+        List<UserPO> userPOS = userMapper.findUsers(user);
+        return new PageInfo<>(userPOS);
     }
 
     @Cacheable(value = "userLocalCache", key = LISTS, unless = " #result == null ")
-    public List<User> findAll() {
+    public List<UserPO> findAll() {
         return userMapper.findAll();
     }
 
     @Cacheable(value = "userLocalCache", key = "'id-' + #id", unless = "#result == null ")
-    public User findById(long id) {
+    public UserPO findById(long id) {
         return userMapper.findById(id);
     }
 
     @Cacheable(value = "userLocalCache", key = "'name-' + #name", unless = "#result == null ")
-    public User findByName(String name) {
+    public UserPO findByName(String name) {
         return userMapper.findByName(name);
     }
 
-    public long create(User user) {
+    public long create(UserPO userPO) {
         try {
-            cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
-            user.setCreator(u.getName());
-            user.setModifier(u.getName());
-            userMapper.insert(user);
-            long id = user.getId();
+            UserDO u = UserUtils.getUser();
+            userPO.setCreator(u.getName());
+            userPO.setModifier(u.getName());
+            userMapper.insert(userPO);
+            long id = userPO.getId();
             String content = String.format("创建%s用户,[邮箱:%s,是否上线:%s]",
-                    user.getLoginName(), user.getEmail(), IS_USER_USED.test(user)
+                    userPO.getLoginName(), userPO.getEmail(), IS_USER_USED.test(userPO)
             );
-            opLogRepository.insert(new OpLog(OpLogTypeEnum.User_Add.getValue(), u.getId(), content));
+            opLogRepository.insert(new OpLogPO(OpLogTypeEnum.User_Add.getValue(), u.getId(), content));
             return id;
         } finally {
             Cache cache = cacheManager.getCache(UserLocalCache.getCode());
@@ -78,45 +79,44 @@ public class UserRepository {
         }
     }
 
-    public void update(User user) {
-        long id = user.getId();
-        User existsUser = findById(id);
-        if (existsUser == null) {
+    public void update(UserPO prvUserPO, UserPO userPO) {
+        if (prvUserPO == null) {
             return;
         }
+        long id = userPO.getId();
         try {
-            cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
-            user.setModifier(u.getName());
-            userMapper.update(user);
+            UserDO u = UserUtils.getUser();
+            userPO.setModifier(u.getName());
+            userMapper.update(userPO);
             String content = String.format("编辑%s用户,[邮箱:%s,是否上线:%s]->[邮箱:%s,是否上线:%s]",
-                    existsUser.getLoginName(), existsUser.getEmail(), IS_USER_USED.test(existsUser), user.getLoginName(), IS_USER_USED.test(user)
+                    prvUserPO.getLoginName(), prvUserPO.getEmail(), IS_USER_USED.test(prvUserPO), userPO.getLoginName(), IS_USER_USED.test(userPO)
             );
-            opLogRepository.insert(new OpLog(OpLogTypeEnum.User_Edit.getValue(), u.getId(), content));
+            opLogRepository.insert(new OpLogPO(OpLogTypeEnum.User_Edit.getValue(), u.getId(), content));
         } finally {
             Cache cache = cacheManager.getCache(UserLocalCache.getCode());
             cache.evict(LISTS);
             cache.evict(ID_ + id);
-            cache.evict(NAME_ + existsUser.getLoginName());
+            cache.evict(NAME_ + prvUserPO.getLoginName());
         }
     }
 
-    public void delete(long id) {
-        User user = findById(id);
-        if (user == null) {
+    public void delete(UserPO userPO) {
+        if (userPO == null) {
             return;
         }
+        long id = userPO.getId();
         try {
-            cd.blog.humbird.libra.model.vo.User u = UserUtil.getUser();
+            UserDO u = UserUtils.getUser();
             userMapper.delete(id);
             String content = String.format("删除%s用户",
-                    user.getLoginName()
+                    userPO.getLoginName()
             );
-            opLogRepository.insert(new OpLog(OpLogTypeEnum.User_Delete.getValue(), u.getId(), content));
+            opLogRepository.insert(new OpLogPO(OpLogTypeEnum.User_Delete.getValue(), u.getId(), content));
         } finally {
             Cache cache = cacheManager.getCache(UserLocalCache.getCode());
             cache.evict(LISTS);
             cache.evict(ID_ + id);
-            cache.evict(NAME_ + user.getLoginName());
+            cache.evict(NAME_ + userPO.getLoginName());
         }
     }
 

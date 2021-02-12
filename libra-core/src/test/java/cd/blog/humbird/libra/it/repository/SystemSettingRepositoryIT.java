@@ -9,7 +9,8 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by david on 2018/7/12.
+ * @author david
+ * @since created by on 2018/7/12 00:45
  */
 public class SystemSettingRepositoryIT extends BaseIT {
 

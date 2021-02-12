@@ -1,9 +1,10 @@
 package cd.blog.humbird.libra.register;
 
-import cd.blog.humbird.libra.common.Constants;
-import cd.blog.humbird.libra.common.util.EncodeUtil;
-import cd.blog.humbird.libra.common.util.ZKUtil;
-import cd.blog.humbird.libra.common.zk.ZKCli;
+import cd.blog.humbird.libra.common.constant.LibraPath;
+import cd.blog.humbird.libra.common.constant.Parameter;
+import cd.blog.humbird.libra.common.util.EncodeUtils;
+import cd.blog.humbird.libra.common.util.ZkUtils;
+import cd.blog.humbird.libra.common.zk.ZkCli;
 import cd.blog.humbird.libra.exception.ZookeeperRegisterException;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
@@ -23,12 +24,12 @@ public class ZookeeperRegister implements Register {
 
     private String servers;
     private String namespace;
-    private String parentPath = Constants.CONFIG_PATH;
+    private String parentPath = LibraPath.CONFIG_PATH;
     private String contextNode = "CONTEXTVALUE";
     private String timestampNode = "TIMESTAMP";
 
     private CuratorFramework cli;
-    private ZKCli zkCli;
+    private ZkCli zkCli;
 
     public ZookeeperRegister(String servers) {
         this(servers, null);
@@ -37,8 +38,8 @@ public class ZookeeperRegister implements Register {
     public ZookeeperRegister(String servers, String namespace) {
         this.servers = servers;
         this.namespace = namespace;
-        this.cli = ZKUtil.createCuratorCli(servers, namespace);
-        this.zkCli = new ZKCli(this.cli);
+        this.cli = ZkUtils.createCuratorCli(servers, namespace);
+        this.zkCli = new ZkCli(this.cli);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class ZookeeperRegister implements Register {
     public void registerAndPushContextValue(String key, String value) {
         try {
             set(this.parentPath + "/" + key + "/" + this.contextNode, value);
-            set(this.parentPath + "/" + key + "/" + this.timestampNode, EncodeUtil.long2byte(System.currentTimeMillis()));
+            set(this.parentPath + "/" + key + "/" + this.timestampNode, EncodeUtils.long2byte(System.currentTimeMillis()));
         } catch (Exception e) {
             throw new ZookeeperRegisterException("Push config[" + key + "]'s context and timestamp value[" + value + "] to zookeeper failed.", e);
         }
@@ -146,11 +147,11 @@ public class ZookeeperRegister implements Register {
 
     @Override
     public String getRemoteDataVersion(String key) {
-        String path = this.parentPath + "/" + key;
+        String path = this.parentPath + LibraPath.PATH_SEPARATOR + key;
         try {
             Stat stat = new Stat();
             zkCli.get(path, stat);
-            return String.format(Constants.VERSION_FORMAT, stat.getMtime(), stat.getVersion());
+            return String.format(Parameter.VERSION_FORMAT, stat.getMtime(), stat.getVersion());
         } catch (Exception e) {
             LOGGER.warn("get data version from zookeeper fail,error:{}", e);
         }
@@ -191,7 +192,7 @@ public class ZookeeperRegister implements Register {
     }
 
     private boolean set(String path, long value) throws Exception {
-        return this.set(path, EncodeUtil.long2byte(value));
+        return this.set(path, EncodeUtils.long2byte(value));
     }
 
     private boolean set(String path, String value) throws Exception {
